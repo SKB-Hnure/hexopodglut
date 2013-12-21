@@ -1,0 +1,142 @@
+# depslib dependency file v1.0
+1387580253 source:/home/diana/Programms/codeblocks/glut/main.cpp
+	<GL/glut.h>
+	<stdlib.h>
+	"three_angles.h"
+	<GL/glx.h>
+	<GL/gl.h>
+	<X11/X.h>
+	<X11/keysym.h>
+
+1370385653 /usr/include/GL/glut.h
+	"freeglut_std.h"
+
+1370385653 /usr/include/GL/freeglut_std.h
+	<windows.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+
+1387188724 /usr/include/GL/gl.h
+	"gl_mangle.h"
+	<windows.h>
+	<GL/glext.h>
+
+1387188724 /usr/include/GL/gl_mangle.h
+
+1387188724 /usr/include/GL/glext.h
+	<windows.h>
+	<stddef.h>
+	<inttypes.h>
+	<inttypes.h>
+	<inttypes.h>
+	<stdint.h>
+	<stdint.h>
+	<inttypes.h>
+
+1381553386 /usr/include/inttypes.h
+	<features.h>
+	<stdint.h>
+	<stddef.h>
+
+1381553367 /usr/include/features.h
+	<stdc-predef.h>
+	<sys/cdefs.h>
+	<gnu/stubs.h>
+
+1381553367 /usr/include/stdc-predef.h
+	<bits/predefs.h>
+
+1381553387 /usr/include/stdint.h
+	<features.h>
+	<bits/wchar.h>
+	<bits/wordsize.h>
+
+1382363599 /usr/include/GL/glu.h
+	"glu_mangle.h"
+	<GL/gl.h>
+
+1382363599 /usr/include/GL/glu_mangle.h
+
+1381553386 /usr/include/stdlib.h
+	<features.h>
+	<stddef.h>
+	<bits/waitflags.h>
+	<bits/waitstatus.h>
+	<xlocale.h>
+	<sys/types.h>
+	<alloca.h>
+	<bits/stdlib-float.h>
+	<bits/stdlib.h>
+	<bits/stdlib-ldbl.h>
+
+1381553368 /usr/include/xlocale.h
+
+1381553387 /usr/include/alloca.h
+	<features.h>
+	<stddef.h>
+
+1387188724 /usr/include/GL/glx.h
+	<X11/Xlib.h>
+	<X11/Xutil.h>
+	<GL/gl.h>
+	"glx_mangle.h"
+	<GL/glxext.h>
+
+1382720102 /usr/include/X11/Xlib.h
+	<sys/types.h>
+	<stdint.h>
+	<X11/X.h>
+	<X11/Xfuncproto.h>
+	<X11/Xosdefs.h>
+	<stddef.h>
+	<stdlib.h>
+
+1370798162 /usr/include/X11/X.h
+	<X11/Xmd.h>
+
+1370798162 /usr/include/X11/Xmd.h
+	<sys/isa_defs.h>
+
+1370798162 /usr/include/X11/Xfuncproto.h
+
+1370798162 /usr/include/X11/Xosdefs.h
+
+1382720102 /usr/include/X11/Xutil.h
+	<X11/Xlib.h>
+	<X11/keysym.h>
+
+1370798162 /usr/include/X11/keysym.h
+	<X11/keysymdef.h>
+
+1370798162 /usr/include/X11/keysymdef.h
+
+1387188724 /usr/include/GL/glx_mangle.h
+
+1387188724 /usr/include/GL/glxext.h
+	<inttypes.h>
+	<inttypes.h>
+	<inttypes.h>
+	<stdint.h>
+	<stdint.h>
+	<inttypes.h>
+
+1387424113 /home/diana/Programms/codeblocks/glut/three_angles.h
+	<math.h>
+
+1381553385 /usr/include/math.h
+	<features.h>
+	<bits/huge_val.h>
+	<bits/huge_valf.h>
+	<bits/huge_vall.h>
+	<bits/inf.h>
+	<bits/nan.h>
+	<bits/mathdef.h>
+	<bits/mathcalls.h>
+	<bits/mathcalls.h>
+	<bits/mathcalls.h>
+	<bits/mathinline.h>
+	<bits/math-finite.h>
+
