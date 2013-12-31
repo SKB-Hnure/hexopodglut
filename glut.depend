@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1387580253 source:/home/diana/Programms/codeblocks/glut/main.cpp
+1388447915 source:/home/diana/Programms/codeblocks/glut/main.cpp
 	<GL/glut.h>
 	<stdlib.h>
 	"three_angles.h"
@@ -7,6 +7,8 @@
 	<GL/gl.h>
 	<X11/X.h>
 	<X11/keysym.h>
+	<string.h>
+	<stdio.h>
 
 1370385653 /usr/include/GL/glut.h
 	"freeglut_std.h"
@@ -139,4 +141,79 @@
 	<bits/mathcalls.h>
 	<bits/mathinline.h>
 	<bits/math-finite.h>
+
+1381553389 /usr/include/string.h
+	<features.h>
+	<stddef.h>
+	<xlocale.h>
+	<bits/string.h>
+	<bits/string2.h>
+	<bits/string3.h>
+
+1381553388 /usr/include/stdio.h
+	<features.h>
+	<stddef.h>
+	<bits/types.h>
+	<libio.h>
+	<stdarg.h>
+	<bits/stdio_lim.h>
+	<bits/sys_errlist.h>
+	<getopt.h>
+	<bits/stdio.h>
+	<bits/stdio2.h>
+	<bits/stdio-ldbl.h>
+
+1381553388 /usr/include/libio.h
+	<_G_config.h>
+	<stdarg.h>
+	<sys/cdefs.h>
+	<bits/stdio-lock.h>
+	<shlib-compat.h>
+	<bits/libio-ldbl.h>
+
+1381553388 /usr/include/_G_config.h
+	<bits/types.h>
+	<stddef.h>
+	<wchar.h>
+	<gconv.h>
+
+1381553390 /usr/include/wchar.h
+	<features.h>
+	<stdio.h>
+	<stdarg.h>
+	<bits/wchar.h>
+	<stddef.h>
+	<wctype.h>
+	<xlocale.h>
+	<xlocale.h>
+	<xlocale.h>
+	<wctype.h>
+	<bits/wchar2.h>
+	<bits/wchar-ldbl.h>
+
+1381553395 /usr/include/wctype.h
+	<features.h>
+	<bits/types.h>
+	<wchar.h>
+	<endian.h>
+	<xlocale.h>
+
+1381553389 /usr/include/endian.h
+	<features.h>
+	<bits/endian.h>
+	<bits/byteswap.h>
+
+1381553367 /usr/include/gconv.h
+	<features.h>
+	<wchar.h>
+	<stddef.h>
+
+1381553392 /usr/include/getopt.h
+	<ctype.h>
+
+1381553383 /usr/include/ctype.h
+	<features.h>
+	<bits/types.h>
+	<endian.h>
+	<xlocale.h>
 

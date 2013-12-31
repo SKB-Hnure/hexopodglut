@@ -5,6 +5,8 @@
 #include <GL/gl.h>
 #include <X11/X.h>    /* X11 constant (e.g. TrueColor) */
 #include <X11/keysym.h>
+#include <string.h>
+#include <stdio.h>
 using namespace std;
 
 float bodywidth=200;
@@ -21,12 +23,14 @@ float angleZ=0;
 struct axval {
 float x;
 float y;
-float z;};
-axval point={100,100,80};
+float z;
+};
+axval point={180,0,190};
+axval point0={180,0,190};
 axval L[3]={                               //размеры звеньев ноги
-            {70, 20, 50},
+            {80, 20, 50},
             {100, 20, 50},
-            {200, 20, 50}
+            {190, 20, 50}
             };
 axval o[3][6];                                    //координаты центров
 axval ang[3][6]={                                  //углы наклона
@@ -34,6 +38,12 @@ axval ang[3][6]={                                  //углы наклона
                  {{0,0,-60},{0,0,30},{0,0,-30},{0,0,-30},{0,0,30},{0,0,30}},     //первое поступательное
                  {{0,0,60},{0,0,-60},{0,0,60},{0,0,60},{0,0,-60},{0,0,-60}}
                  };
+int direction=0;
+void draw_string_bitmap(void *font, const char* string)
+{
+  while (*string)
+    glutBitmapCharacter(font, *string++);
+}
 void setka()                              //разметка окна
 {
 glColor3f(0.153,0.525,0.616);
@@ -44,9 +54,19 @@ glBegin(GL_QUADS);
  glVertex2f(WinWid-180,WinHei-20);
 glEnd();
 };
-
+void navigation(int direction)
+{
+glutWireSphere(100,50,50);
+}
+char* to_char(int val)
+{
+ char *buff=new char[5];
+ sprintf(buff, "%d", val);
+ return buff;
+}
 void parallelepiped(int width, int height, int deep, axval angle, axval center)
 {
+glColor3f(0.153,0.525,0.616);
 glPushMatrix();
 glTranslatef(center.x, center.y, center.z);
 glRotatef(angle.x,0,1,0);
@@ -122,10 +142,30 @@ void Keyboard (unsigned char key, int x, int y)
 {
 switch (key)
  {
- case 'a': break;
- case 'd': break;
- case 'w': break;
- case 's': break;
+ case 'a':
+           if ((direction>90)&&(direction<270))
+           direction++;
+           if ((direction>=0)&&(direction<90)||(direction>270)&&(direction<360))
+           direction--;
+           break;
+ case 'd':
+          if ((direction>90)&&(direction<270))
+           direction--;
+           if ((direction>=0)&&(direction<90)||(direction>270)&&(direction<360))
+           direction++;
+            break;
+ case 'w':
+           if ((direction>0)&&(direction<180))
+           direction++;
+           if ((direction>180)&&(direction<360))
+           direction--;
+ break;
+ case 's':
+           if ((direction>0)&&(direction<180))
+           direction--;
+           if ((direction>180)&&(direction<360))
+           direction++;
+ break;
  }
 }
 void SKeyboard(int key, int x, int y)
@@ -167,190 +207,210 @@ ang[1][0].z=-a[1];
 ang[2][0].z=a[2]-a[1];
 legs(bodywidth, bodyheight, bodylong);
 }
-void vstep(int microsec, int steplong, int height, int angle)          //??? ? ???????????
-{  int x0=0; int y0=0; int x1,y1; double anr;
-   int y, x;
-   anr=grad_to_rad(angle);
-  int z=height;
-  int rz=height-20;
-  if ((angle>=0)&&(angle<90))                                            // I
+void step(float direction, float steplong, axval p0)        //от primary direction
+{
+static float angle;
+if (direction>=90) angle=direction-90;
+else angle=direction+270;
+float anr=grad_to_rad(angle);
+float x1, y1;
+int rz=p0.z-40;
+static bool dir=true;
+struct state
+ {
+  bool up,down,stable;
+ };
+static state z={false, false, true};
+glColor3f(0.153,0.525,0.616);
+  if ((angle>=0)&&(angle<=90))                                            // I
       {
-         x1=steplong*cos(anr)+x0;
-         y1=steplong*sin(anr)+y0;
-         //if (abs(x1)>=abs(y1))
-         //{
-         static int X=x0;
-         int Y;
-           if (X<=x1)
+      x1=steplong*cos(anr)+p0.x;
+      y1=steplong*sin(anr)+p0.y;
+         }
+  if ((angle>90)&&(angle<=180))                                            // II
+      {
+      x1=-steplong*cos(Pi-anr)+p0.x;
+      y1= steplong*sin(Pi-anr)+p0.y;
+      }
+if ((angle>180)&&(angle<=270))                                            // III
+      {
+      x1=p0.x-steplong*cos(anr-Pi);
+      y1=p0.y-steplong*sin(anr-Pi);
+      }
+ if ((angle>270)&&(angle<=360))                                                 //IV
+      {
+      x1=p0.x+steplong*cos(2*Pi-anr);
+      y1=p0.y-steplong*sin(2*Pi-anr);
+      }
+      //нашли точки конца шага.
+if (abs(x1-p0.x)>=abs(y1-p0.y))
+{glRasterPos3f(290,500,0);
+char *a=to_char(y1);
+draw_string_bitmap(GLUT_BITMAP_HELVETICA_12, a);
+        if ((angle>=0)&&(angle<90)||((angle>270)&&(angle<360)))
+        {
+           if ((point.x<x1)&&(dir==true)&&(z.stable))
          {
-         X++;
-         Y=(y1-y0)*(X-x0)/(x1-x0)+y0;
+          point.x++;
+          point.y=(y1-p0.y)*(float)(point.x-p0.x)/(x1-p0.x)+p0.y;
+          point.z=p0.z;
+          topoint(point);
+          if (point.x>=x1)
+           {
+            dir=false;
+            z.up=true;
+            z.stable=false;
+            }
+             }
+        if ((point.x>=p0.x)&&(dir==false)&&(z.stable))
+         {
+         point.x--;
+         point.y=(y1-p0.y)* (float) (point.x-p0.x)/(x1-p0.x)+p0.y;
+         point.z=rz;
          topoint(point);
-              }
-         if (X>=x0)
+         if (point.x<=p0.x)
+          {
+            dir=true;
+            z.down=true;
+            z.stable=false;
+           }
+           }
+        }
+if ((angle>90)&&(angle<270))
         {
-              X--;
-              Y=(y1-y0)*(X-x0)/(x1-x0)+y0;
-              topoint(point);
-              }
-      //   }
-         /*else
-            {
-            static int Y=y0;
-            int X;
-            if (Y<=y1)
+           if ((point.x>x1)&&(dir==true)&&(z.stable))
          {
-               Y++;
-               X=(x1-x0)*(Y-y0)/(y1-y0)+x0;
-               topoint(X,Y,z);
-              }
-             if (Y>=y0)
+         point.x--;
+         point.y=(y1-p0.y)*(float)(point.x-p0.x)/(x1-p0.x)+p0.y;
+         point.z=p0.z;
+         topoint(point);
+         if (point.x<=x1)
+          {
+            dir=false;
+            z.up=true;
+            z.stable=false;
+           }
+           }
+           if ((point.x<p0.x)&&(dir==false)&&(z.stable))
+         {
+          point.x++;
+          point.y=(y1-p0.y)*(float)(point.x-p0.x)/(x1-p0.x)+p0.y;
+          point.z=rz;
+          topoint(point);
+           if (point.x>=p0.x)
+            {
+             dir=true;
+             z.down=true;
+             z.stable=false;
+            }
+          }
+        }
+}
+else
+if (abs(x1-p0.x)<abs(y1-p0.y))
+{
+        if ((angle>=0)&&(angle<180))
+    {
+         if ((point.y<y1)&&(dir==true)&&(z.stable))
         {
-              Y--;
-                X=(x1-x0)*(Y-y0)/(y1-y0)+x0;
-                topoint(X,Y,rz);
-
+          point.y++;
+          point.x=(x1-p0.x)*(float)(point.y-p0.y)/(y1-p0.y)+p0.x;
+          point.z=p0.z;
+          topoint(point);
+         if (point.y>=y1)
+          {
+            dir=false;
+            z.up=true;
+            z.stable=false;
+           }
+        }
+         if ((point.y>p0.y)&&(dir==false)&&(z.stable))
+        {
+              point.z=rz;
+              point.y--;
+              point.x=(x1-p0.x)*(float)(point.y-p0.y)/(y1-p0.y)+p0.x;
+              topoint(point);
+              if (point.y<=p0.y)
+              {
+               dir=true;
+               z.stable=false;
+               z.down=true;
               }
+        }
+    }
+    if ((angle>=180)&&(angle<360))
+        {
+         if ((point.y>y1)&&(dir==true)&&(z.stable))
+         {
+          point.y--;
+          point.x=(x1-p0.x)*(float)(point.y-p0.y)/(y1-p0.y)+p0.x;
+          point.z=p0.z;
+          topoint(point);
+         if (point.y<=y1)
+          {
+            dir=false;
+            z.up=true;
+            z.stable=false;
            }
-      }
-  if(angle==90)                                                       //Pi/2
-           {
-         x1=steplong*cos(anr)+x0;
-         y1=steplong*sin(anr)+y0;
-             for(y=y0;y<y1;y++)
-               {
-                  topoint(x,y,z);
-
-               }
-             for(y=y1;y>y0;y--)
-               {
-                  topoint(x,y,rz);
-
-               }
            }
-  if((angle>=91)&&(angle<=180))                                    //II
-  {
-      x1=x0-steplong*cos(Pi-anr);
-      y1=steplong*sin(Pi-anr)+y0;
-      if (abs(x1)>=abs(y1))
-      {
-         for (x=x0;x>x1;x--)
-           {
-             y=(y1-y0)*(x-x0)/(x1-x0)+y0;
-             topoint(x,y,z);
-
-           }
-         for (x=x1;x<x0;x++)
-           {
-             y=(y1-y0)*(x-x0)/(x1-x0)+y0;
-             topoint(x,y,rz);
-           }
-      } else
-      {
-         for (y=y0;y<y1;y++)
-           {
-             x=(x1-x0)*(y-y0)/(y1-y0)+x0;
-             topoint(x,y,z);
-           }
-         for (y=y1;y>y0;y--)
-           {
-              x=(x1-x0)*(y-y0)/(y1-y0)+x0;
-              topoint(x,y,rz);
-            }
-      }
- }
-if ((angle>=181)&&(angle<270))                                 //III
-  {
-      x1=x0-steplong*cos(anr-Pi);
-      y1=y0-steplong*sin(anr-Pi);
-       if (x1<0)
-      { int lmax=30;
-      x1=x0-lmax*cos(Pi-anr);
-      y1=lmax*sin(Pi-anr)+y0;}
-      if (abs(x1)>=abs(y1))
-      {
-         for (x=x0;x>x1;x--)
-           {
-             y=(y1-y0)*(x-x0)/(x1-x0)+y0;
-             topoint(x,y,z);
-           }
-         for (x=x1;x<x0;x++)
-           {
-             y=(y1-y0)*(x-x0)/(x1-x0)+y0;
-             topoint(x,y,z);
-           }
-      }
-      else
-      {
-         for (y=y0;y>y1;y--)
-           {
-             x=(x1-x0)*(y-y0)/(y1-y0)+x0;
-             topoint(x,y,z);
-           }
-         for (y=y1;y<y0;y++)
-           {
-              x=(x1-x0)*(y-y0)/(y1-y0)+x0;
-              topoint(x,y,rz);
-            }
-      }
-
-  }
-if (angle==270)                                                           //3Pi/2
-  {
-         x1=steplong*cos(Pi/2)+x0;
-         y1=y0-steplong*sin(Pi/2);
-             for(y=y0;y>y1;y--)
-               {
-                  topoint(x1,y,z);
-               }
-             for(y=y1;y<y0;y++)
-               {
-                  topoint(x1,y,rz);
-               }
-           }
-if ((angle>=270)&&(angle<=360))                                                 //IV
-{
-      x1=x0+steplong*cos(2*Pi-anr);
-      y1=y0-steplong*sin(2*Pi-anr);
-      if (abs(x1)>=abs(y1))
-      {
-         for (x=x0;x<x1;x++)
-           {
-             y=(y1-y0)*(x-x0)/(x1-x0)+y0;
-             topoint(x,y,z);
-           }
-         for (x=x1;x>x0;x--)
-           {
-             y=(y1-y0)*(x-x0)/(x1-x0)+y0;
-             topoint(x,y,rz);
-           }
-      }
-       else
-      {
-         for (y=y0;y>y1;y--)
-           {
-             x=(x1-x0)*(y-y0)/(y1-y0)+x0;
-             topoint(x,y,z);
-           }
-         for (y=y1;y<y0;y++)
-           {
-              x=(x1-x0)*(y-y0)/(y1-y0)+x0;
-              topoint(x,y,rz);
-            }
-      }
-      */
- }
+         if ((point.y<p0.y)&&(dir==false)&&(z.stable))
+        {
+              point.z=rz;
+              point.y++;
+              point.x=(x1-p0.x)*(float)(point.y-p0.y)/(y1-p0.y)+p0.x;
+              topoint(point);
+              if (point.y>=p0.y)
+              {
+               dir=true;
+               z.stable=false;
+               z.down=true;
+              }
+        }
+    }
 }
-void change_point()
+if (z.down)
+  {
+     point.z++;
+     topoint(point);
+       if (point.z>=p0.z)
+        {
+        z.down=false;
+        z.stable=true;
+        }
+    }
+ if (z.up)
 {
-static int d=1;
-point.x+=1*d;
-if (point.x<=100) d=1;
-if (point.x>=200) d=-1;
+  point.z--;
+  topoint(point);
+    if (point.z<=rz)
+    {
+        z.up=false;
+        z.stable=true;
+     }
 }
-
+}
+void coordsys(axval o)
+{
+//point0={180,0,190};   x,y,z
+glColor3f(0.5,0.5,0.5);
+glBegin(GL_LINES);
+ glVertex3f(290-200,697,o.y);         //x
+ glVertex3f(290+200, 697, o.y);
+ glVertex3f(290,697-900,o.y);           //y
+ glVertex3f(290,697+100,o.y);
+ glVertex3f(290,697,o.y-100);           //z
+ glVertex3f(290,697,o.y+100);
+glEnd();
+glRasterPos2f(290+200,690);
+draw_string_bitmap(GLUT_BITMAP_HELVETICA_12, "x");
+glRasterPos3f(290,697,-100);
+draw_string_bitmap(GLUT_BITMAP_HELVETICA_12, "y");
+glRasterPos2f(290,697-890);
+draw_string_bitmap(GLUT_BITMAP_HELVETICA_12, "z");
+}
 void draw()
-{glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Очистка экрана и буфера глубины
+{
+glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Очистка экрана и буфера глубины
 glPushMatrix();           //сохранить текущую матрицу
 glScalef(w/WinWid,h/WinHei,1);
 setka();
@@ -360,9 +420,9 @@ glRotatef(angleY,1,0,0);
 glRotatef(angleZ,0,0,1);
 glScalef(1, (float) bodyheight/bodywidth, (float) bodylong/bodywidth);
 glutWireCube(bodywidth);
-change_point();
 topoint(point);
-//vstep(1,50,80,20);
+coordsys(point0);
+step(direction,100,point0);
 glPopMatrix();
 glutSwapBuffers();  //завершение функции рисования только для GLUT_DOUBLE
 }
@@ -381,7 +441,8 @@ void Timer(int value)
         glutTimerFunc(1, Timer, 0);
 }
 void reshape (int ax, int ay)
-{ w=ax;
+{
+  w=ax;
   h=ay;
   glViewport(0,0,ax,ay);
 glMatrixMode(GL_PROJECTION); //команды относятся к проекту
