@@ -42,6 +42,7 @@
 			<Add directory="/usr/lib" />
 		</Linker>
 		<Unit filename="main.cpp" />
+		<Unit filename="send_data.h" />
 		<Unit filename="three_angles.h" />
 		<Extensions>
 			<code_completion />
