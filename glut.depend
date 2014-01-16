@@ -1,15 +1,13 @@
 # depslib dependency file v1.0
-1388860448 source:/home/diana/Programms/codeblocks/glut/main.cpp
+1389812196 source:/home/diana/Programms/codeblocks/glut/main.cpp
 	<GL/glut.h>
 	<stdlib.h>
-	"three_angles.h"
-	<GL/glx.h>
-	<GL/gl.h>
-	<X11/X.h>
-	<X11/keysym.h>
-	<string.h>
 	<stdio.h>
 	<fstream>
+	<string.h>
+	"three_angles.h"
+	"сonvertation.h"
+	"hexopod.h"
 	"send_data.h"
 
 1370385653 /usr/include/GL/glut.h
@@ -127,8 +125,9 @@
 	<stdint.h>
 	<inttypes.h>
 
-1387424113 /home/diana/Programms/codeblocks/glut/three_angles.h
+1389057465 /home/diana/Programms/codeblocks/glut/three_angles.h
 	<math.h>
+	"сonvertation.h"
 
 1381553385 /usr/include/math.h
 	<features.h>
@@ -219,11 +218,13 @@
 	<endian.h>
 	<xlocale.h>
 
-1388860178 /home/diana/Programms/codeblocks/glut/send_data.h
+1389346575 /home/diana/Programms/codeblocks/glut/send_data.h
+	<iostream>
 	<unistd.h>
 	<fcntl.h>
 	<errno.h>
 	<termios.h>
+	<string.h>
 
 1381553392 /usr/include/unistd.h
 	<features.h>
@@ -263,4 +264,12 @@
 	<bits/types.h>
 	<bits/termios.h>
 	<sys/ttydefaults.h>
+
+1389884799 /home/diana/Programms/codeblocks/glut/hexopod.h
+	<string.h>
+	"three_angles.h"
+	"send_data.h"
+
+1389122750 /home/diana/Programms/codeblocks/glut/сonvertation.h
+	<string.h>
 
