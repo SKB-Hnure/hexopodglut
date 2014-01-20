@@ -19,6 +19,17 @@ int sends(char port[], char st[], int length) //отправляет через 
   }
   else
       fcntl(fd, F_SETFL, 0);   // Установить значение флагов описателя, заданное в arg
+/* *** Configure Port *** */
+struct termios tty;
+memset (&tty, 0, sizeof tty);
+
+/* Error Handling */
+if ( tcgetattr ( fd, &tty ) != 0 )
+{
+cout << "Error " << errno << " from tcgetattr: " << strerror(errno) << endl;
+}
+cfsetospeed (&tty, (speed_t)B115200);
+cfsetispeed (&tty, (speed_t)B115200);
    tcflush(fd,TCIFLUSH);
    int n = write(fd, st,length);
     if (n < 0)

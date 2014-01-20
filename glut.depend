@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1389812196 source:/home/diana/Programms/codeblocks/glut/main.cpp
+1390243989 source:/home/diana/Programms/codeblocks/glut/main.cpp
 	<GL/glut.h>
 	<stdlib.h>
 	<stdio.h>
@@ -218,7 +218,7 @@
 	<endian.h>
 	<xlocale.h>
 
-1389346575 /home/diana/Programms/codeblocks/glut/send_data.h
+1390242060 /home/diana/Programms/codeblocks/glut/send_data.h
 	<iostream>
 	<unistd.h>
 	<fcntl.h>
@@ -265,7 +265,7 @@
 	<bits/termios.h>
 	<sys/ttydefaults.h>
 
-1389884799 /home/diana/Programms/codeblocks/glut/hexopod.h
+1390244420 /home/diana/Programms/codeblocks/glut/hexopod.h
 	<string.h>
 	"three_angles.h"
 	"send_data.h"
