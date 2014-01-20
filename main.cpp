@@ -18,9 +18,8 @@ float h=WinHei;
 float angleX=0;
 float angleY=0;
 float angleZ=0;
+int steptime=20000;
 axval bodysize={200,50,350};
-//axval point={180,0,190};
-//axval point0={180,0,190};
 axval L[3]={                               //размеры звеньев ноги
             {80, 20, 50},
             {100, 20, 50},
@@ -246,7 +245,7 @@ glScalef(1, (float) bodysize.y/bodysize.x, (float) bodysize.z/bodysize.x);
 glutWireCube(bodysize.x);
 coordsys();
 for (int i=0;i<6;i++)
-H.step(direction,50,1000,i);
+H.step(direction,50,steptime,i);
 glPopMatrix();
 glutSwapBuffers();  //завершение функции рисования только для GLUT_DOUBLE
 }

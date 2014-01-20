@@ -336,11 +336,11 @@ if (n==3) firstcall=false;
 //cout<<"n="<<n<<";  ("<<p0[n].x<<";"<<p0[n].y<<";"<<p0[n].z<<")\n";
 if (abs(x1-p0[n].x)>=abs(y1-p0[n].y))
 {
-delay=(float) time/(abs(x1-p0[n].x)-1);
         if ((angle>180)&&(angle<360))
         {
-           if ((point[n].x>=x1)&&(dir[n]==true)&&(z[n].stable))
+           if ((point[n].x>=x1)&&(dir[n]==true)&&(z[n].stable))  //нижнее горизонтальное
          {
+          delay=(float) time/(2*abs(x1-p0[n].x)-1);
           point[n].x--;
           point[n].y=(y1-p0[n].y)*(float)(point[n].x-p0[n].x)/(x1-p0[n].x)+p0[n].y;
           point[n].z=p0[n].z;
@@ -353,8 +353,9 @@ delay=(float) time/(abs(x1-p0[n].x)-1);
             z[n].stable=false;
             }
              }
-        if ((point[n].x<=p0[n].x)&&(dir[n]==false)&&(z[n].stable))
+        if ((point[n].x<=p0[n].x)&&(dir[n]==false)&&(z[n].stable))     //верхнее горизонтальное
          {
+         delay=(float) time/(4*((abs(x1-p0[n].x)-1)+(abs(rz-p0[n].z)-1)));
          point[n].x++;
          point[n].y=(y1-p0[n].y)* (float) (point[n].x-p0[n].x)/(x1-p0[n].x)+p0[n].y;
          point[n].z=rz;
@@ -372,6 +373,7 @@ if ((angle>0)&&(angle<=180))
         {
            if ((point[n].x<x1)&&(dir[n]==true)&&(z[n].stable))
          {
+         delay=(float) time/(2*abs(x1-p0[n].x)-1);
          point[n].x++;
          point[n].y=(y1-p0[n].y)*(float)(point[n].x-p0[n].x)/(x1-p0[n].x)+p0[n].y;
          point[n].z=p0[n].z;
@@ -386,6 +388,7 @@ if ((angle>0)&&(angle<=180))
            }
            if ((point[n].x>p0[n].x)&&(dir[n]==false)&&(z[n].stable))
          {
+          delay=(float) time/(4*((abs(x1-p0[n].x)-1)+(abs(rz-p0[n].z)-1)));
           point[n].x--;
           point[n].y=(y1-p0[n].y)*(float)(point[n].x-p0[n].x)/(x1-p0[n].x)+p0[n].y;
           point[n].z=rz;
@@ -403,11 +406,11 @@ if ((angle>0)&&(angle<=180))
 else
 if (abs(x1-p0[n].x)<abs(y1-p0[n].y))
 {
-delay=time/(abs(y1-p0[n].y)-1);
         if ((angle>=90)&&(angle<270))
     {
          if ((point[n].y<y1)&&(dir[n]==true)&&(z[n].stable))
         {
+          delay=time/(2*abs(y1-p0[n].y)-1);
           point[n].y++;
           point[n].x=(x1-p0[n].x)*(float)(point[n].y-p0[n].y)/(y1-p0[n].y)+p0[n].x;
           point[n].z=p0[n].z;
@@ -422,6 +425,7 @@ delay=time/(abs(y1-p0[n].y)-1);
         }
          if ((point[n].y>p0[n].y)&&(dir[n]==false)&&(z[n].stable))
         {
+              delay=(float) time/(4*((abs(y1-p0[n].y)-1)+(abs(rz-p0[n].z)-1)));
               point[n].z=rz;
               point[n].y--;
               point[n].x=(x1-p0[n].x)*(float)(point[n].y-p0[n].y)/(y1-p0[n].y)+p0[n].x;
@@ -439,6 +443,7 @@ delay=time/(abs(y1-p0[n].y)-1);
         {
          if ((point[n].y>y1)&&(dir[n]==true)&&(z[n].stable))
          {
+          delay=time/(2*abs(y1-p0[n].y)-1);
           point[n].y--;
           point[n].x=(x1-p0[n].x)*(float)(point[n].y-p0[n].y)/(y1-p0[n].y)+p0[n].x;
           point[n].z=p0[n].z;
@@ -453,6 +458,7 @@ delay=time/(abs(y1-p0[n].y)-1);
            }
          if ((point[n].y<p0[n].y)&&(dir[n]==false)&&(z[n].stable))
         {
+              delay=(float) time/(4*((abs(y1-p0[n].y)-1)+(abs(rz-p0[n].z)-1)));
               point[n].z=rz;
               point[n].y++;
               point[n].x=(x1-p0[n].x)*(float)(point[n].y-p0[n].y)/(y1-p0[n].y)+p0[n].x;
@@ -469,6 +475,7 @@ delay=time/(abs(y1-p0[n].y)-1);
 }
 if (z[n].down)
   {
+    delay=(float) time/(4*((abs(y1-p0[n].y)-1)+(abs(rz-p0[n].z)-1)));
      point[n].z++;
           topoint(transpoint(point[n],shift),n);
       servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
@@ -483,6 +490,7 @@ if (z[n].down)
     }
  if (z[n].up)
 {
+  delay=(float) time/(4*((abs(y1-p0[n].y)-1)+(abs(rz-p0[n].z)-1)));
   point[n].z--;
   topoint(transpoint(point[n],shift),n);
   servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
