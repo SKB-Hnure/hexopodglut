@@ -9,12 +9,12 @@ return 1856*angle/180;
 double rad_to_grad(double angle)
 {
 int P=3.1415;
-return 180*angle/P;
+return (double)180*angle/P;
 }
 double grad_to_rad(double angle)
 {
 int P=3.1415;
-return P*angle/180;
+return (double)P*angle/180;
 }
 char* to_char(int val) //возвращает число, преобразованное в строку
 {

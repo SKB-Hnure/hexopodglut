@@ -40,6 +40,7 @@ int max;
       int points_num=0;
       char *path="/home/diana/file.txt";
       bool firstcall;
+      int dcenleg;
 axval find_point0(int n)
 {
 axval point0, legbeg;
@@ -54,7 +55,7 @@ point0.y=legbeg.y+sin(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(
 point0.z=legbeg.z-L[1].x*sin(grad_to_rad(ang0[1][0].z))+L[2].x*sin(grad_to_rad(ang0[2][0].z-ang0[1][0].z));
 break;
 case 1:
-legbeg.x=bodysize.x/2-L[2].y;
+legbeg.x=bodysize.x/2;
 legbeg.y=0;
 legbeg.z=L[0].y;
 point0.x=legbeg.x-cos(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(ang0[1][0].z))+L[2].x*cos(grad_to_rad(ang0[2][0].z-ang0[1][0].z)));
@@ -78,7 +79,7 @@ point0.y=legbeg.y+sin(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(
 point0.z=legbeg.z-L[1].x*sin(grad_to_rad(ang0[1][0].z))+L[2].x*sin(grad_to_rad(ang0[2][0].z-ang0[1][0].z));
 break;
 case 4:
-legbeg.x=bodysize.x/2-L[2].y;
+legbeg.x=bodysize.x/2;
 legbeg.y=bodysize.z/2;
 legbeg.z=L[0].y;
 point0.x=legbeg.x-cos(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(ang0[1][0].z))+L[2].x*cos(grad_to_rad(ang0[2][0].z-ang0[1][0].z)));
@@ -86,7 +87,7 @@ point0.y=legbeg.y-sin(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(
 point0.z=legbeg.z-L[1].x*sin(grad_to_rad(ang0[1][0].z))+L[2].x*sin(grad_to_rad(ang0[2][0].z-ang0[1][0].z));
 break;
 case 5:
-legbeg.x=bodysize.x/2-L[2].y;
+legbeg.x=bodysize.x/2;
 legbeg.y=bodysize.z/2;
 legbeg.z=L[0].y;
 point0.x=legbeg.x-cos(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(ang0[1][0].z))+L[2].x*cos(grad_to_rad(ang0[2][0].z-ang0[1][0].z)));
@@ -119,9 +120,10 @@ if ((angle>180)&&(angle<=270))                                            // III
       y1=p0[n].y-steplong*cos(2*Pi-anr);
       }
 }
-      hexopod(axval body_size, axval leg_element_size[3],axval angles[3][6], extreme_values b[6][3],int p[6][3], int o[6][3],int dir_servo[6][3])
+      hexopod(axval body_size, int shcenleg, axval leg_element_size[3],axval angles[3][6], extreme_values b[6][3],int p[6][3], int o[6][3],int dir_servo[6][3])
               {
               bodysize=body_size;
+              dcenleg=shcenleg;
               for (int i=0;i<6;i++)
                for(int j=0;j<3;j++)
                {
@@ -188,9 +190,9 @@ axval o[3][6];
 axval opoint[6];
 for (int i=0;i<6;i++)
 opoint[i].y=(float)-bodysize.y/2+L[0].y/2;
-opoint[0].x=(float) bodysize.x/2;
+opoint[0].x=(float) bodysize.x/2+dcenleg;
 opoint[0].z=0;
-opoint[1].x=-(float) bodysize.x/2;
+opoint[1].x=-(float) bodysize.x/2-dcenleg;
 opoint[1].z=0;
 opoint[2].x=(float) bodysize.x/2;
 opoint[2].z=(float) bodysize.z/2;
@@ -332,15 +334,16 @@ z[n].up=true;
 z[n].stable=false;
 if (n==3) firstcall=false;
 }
-
+float dstep;
 //cout<<"n="<<n<<";  ("<<p0[n].x<<";"<<p0[n].y<<";"<<p0[n].z<<")\n";
 if (abs(x1-p0[n].x)>=abs(y1-p0[n].y))
 {
+delay=(float) 2*time/(abs(x1-p0[n].x));
+dstep=(float)time/(2*(abs(x1-p0[n].x)+2*abs(p0[n].z-rz)));
         if ((angle>180)&&(angle<360))
         {
-           if ((point[n].x>=x1)&&(dir[n]==true)&&(z[n].stable))  //нижнее горизонтальное
+           if ((point[n].x>=x1)&&(dir[n]==true)&&(z[n].stable))
          {
-          delay=(float) time/(2*abs(x1-p0[n].x)-1);
           point[n].x--;
           point[n].y=(y1-p0[n].y)*(float)(point[n].x-p0[n].x)/(x1-p0[n].x)+p0[n].y;
           point[n].z=p0[n].z;
@@ -351,12 +354,22 @@ if (abs(x1-p0[n].x)>=abs(y1-p0[n].y))
             dir[n]=false;
             z[n].up=true;
             z[n].stable=false;
+            if ((n==0)||(n==4)||(n==5))
+             {
+             for (int i=1;i<=3;i++)
+             {
+             z[i].up=false;
+             z[i].down=false;
+             z[i].stable=true;
+             dir[i]=true;
+             }
+
+             }
             }
              }
-        if ((point[n].x<=p0[n].x)&&(dir[n]==false)&&(z[n].stable))     //верхнее горизонтальное
+        if ((point[n].x<=p0[n].x)&&(dir[n]==false)&&(z[n].stable))
          {
-         delay=(float) time/(4*((abs(x1-p0[n].x)-1)+(abs(rz-p0[n].z)-1)));
-         point[n].x++;
+         point[n].x+=dstep;
          point[n].y=(y1-p0[n].y)* (float) (point[n].x-p0[n].x)/(x1-p0[n].x)+p0[n].y;
          point[n].z=rz;
           topoint(transpoint(point[n],shift),n);
@@ -373,7 +386,6 @@ if ((angle>0)&&(angle<=180))
         {
            if ((point[n].x<x1)&&(dir[n]==true)&&(z[n].stable))
          {
-         delay=(float) time/(2*abs(x1-p0[n].x)-1);
          point[n].x++;
          point[n].y=(y1-p0[n].y)*(float)(point[n].x-p0[n].x)/(x1-p0[n].x)+p0[n].y;
          point[n].z=p0[n].z;
@@ -388,8 +400,7 @@ if ((angle>0)&&(angle<=180))
            }
            if ((point[n].x>p0[n].x)&&(dir[n]==false)&&(z[n].stable))
          {
-          delay=(float) time/(4*((abs(x1-p0[n].x)-1)+(abs(rz-p0[n].z)-1)));
-          point[n].x--;
+          point[n].x-=dstep;
           point[n].y=(y1-p0[n].y)*(float)(point[n].x-p0[n].x)/(x1-p0[n].x)+p0[n].y;
           point[n].z=rz;
           topoint(transpoint(point[n],shift),n);
@@ -406,11 +417,12 @@ if ((angle>0)&&(angle<=180))
 else
 if (abs(x1-p0[n].x)<abs(y1-p0[n].y))
 {
+delay=(float)2*time/(abs(y1-p0[n].y));
+dstep=(float)time/(2*(abs(y1-p0[n].y)+2*abs(p0[n].z-rz)));
         if ((angle>=90)&&(angle<270))
     {
          if ((point[n].y<y1)&&(dir[n]==true)&&(z[n].stable))
         {
-          delay=time/(2*abs(y1-p0[n].y)-1);
           point[n].y++;
           point[n].x=(x1-p0[n].x)*(float)(point[n].y-p0[n].y)/(y1-p0[n].y)+p0[n].x;
           point[n].z=p0[n].z;
@@ -425,9 +437,8 @@ if (abs(x1-p0[n].x)<abs(y1-p0[n].y))
         }
          if ((point[n].y>p0[n].y)&&(dir[n]==false)&&(z[n].stable))
         {
-              delay=(float) time/(4*((abs(y1-p0[n].y)-1)+(abs(rz-p0[n].z)-1)));
               point[n].z=rz;
-              point[n].y--;
+              point[n].y-=dstep;
               point[n].x=(x1-p0[n].x)*(float)(point[n].y-p0[n].y)/(y1-p0[n].y)+p0[n].x;
           topoint(transpoint(point[n],shift),n);
               servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
@@ -443,7 +454,6 @@ if (abs(x1-p0[n].x)<abs(y1-p0[n].y))
         {
          if ((point[n].y>y1)&&(dir[n]==true)&&(z[n].stable))
          {
-          delay=time/(2*abs(y1-p0[n].y)-1);
           point[n].y--;
           point[n].x=(x1-p0[n].x)*(float)(point[n].y-p0[n].y)/(y1-p0[n].y)+p0[n].x;
           point[n].z=p0[n].z;
@@ -458,9 +468,8 @@ if (abs(x1-p0[n].x)<abs(y1-p0[n].y))
            }
          if ((point[n].y<p0[n].y)&&(dir[n]==false)&&(z[n].stable))
         {
-              delay=(float) time/(4*((abs(y1-p0[n].y)-1)+(abs(rz-p0[n].z)-1)));
               point[n].z=rz;
-              point[n].y++;
+              point[n].y+=dstep;
               point[n].x=(x1-p0[n].x)*(float)(point[n].y-p0[n].y)/(y1-p0[n].y)+p0[n].x;
           topoint(transpoint(point[n],shift),n);
               servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
@@ -475,8 +484,7 @@ if (abs(x1-p0[n].x)<abs(y1-p0[n].y))
 }
 if (z[n].down)
   {
-    delay=(float) time/(4*((abs(y1-p0[n].y)-1)+(abs(rz-p0[n].z)-1)));
-     point[n].z++;
+     point[n].z+=dstep;
           topoint(transpoint(point[n],shift),n);
       servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
        if (point[n].z>=p0[n].z)
@@ -490,8 +498,7 @@ if (z[n].down)
     }
  if (z[n].up)
 {
-  delay=(float) time/(4*((abs(y1-p0[n].y)-1)+(abs(rz-p0[n].z)-1)));
-  point[n].z--;
+  point[n].z-=dstep;
   topoint(transpoint(point[n],shift),n);
   servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
     if (point[n].z<=rz)

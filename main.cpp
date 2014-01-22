@@ -18,12 +18,13 @@ float h=WinHei;
 float angleX=0;
 float angleY=0;
 float angleZ=0;
-int steptime=20000;
-axval bodysize={200,50,350};
+int steptime=800;
+axval bodysize={250,50,460};
+int dcenleg=80;
 axval L[3]={                               //размеры звеньев ноги
-            {80, 20, 50},
-            {100, 20, 50},
-            {190, 20, 50}
+            {70, 30, 80},
+            {100, 30, 80},
+            {180, 30, 80}
             };
 axval o[3][6];                                    //координаты центров
 axval ang[3][6]={                                  //углы наклона звеньев
@@ -63,7 +64,7 @@ int pin[6][3]={
                {13,14,15},
                };
 int direction=0;
-hexopod H(bodysize,L,ang,servo_border,pin,I0,dir);
+hexopod H(bodysize,dcenleg,L,ang,servo_border,pin,I0,dir);
 void draw_string_bitmap(void *font, const char* string)
 {
   while (*string)
@@ -243,6 +244,16 @@ glRotatef(angleY,1,0,0);
 glRotatef(angleZ,0,0,1);
 glScalef(1, (float) bodysize.y/bodysize.x, (float) bodysize.z/bodysize.x);
 glutWireCube(bodysize.x);
+glBegin(GL_TRIANGLES);
+        glVertex3f(bodysize.x/2, -bodysize.y/2, -bodysize.z/4);
+        glVertex3f(bodysize.x/2, -bodysize.y/2, bodysize.z/4);
+        glVertex3f(bodysize.x/2+dcenleg, -bodysize.y/2, 0);
+glEnd();
+glBegin(GL_TRIANGLES);
+        glVertex3f(-bodysize.x/2, -bodysize.y/2, -bodysize.z/4);
+        glVertex3f(-bodysize.x/2, -bodysize.y/2, bodysize.z/4);
+        glVertex3f(-bodysize.x/2-dcenleg, -bodysize.y/2, 0);
+glEnd();
 coordsys();
 for (int i=0;i<6;i++)
 H.step(direction,50,steptime,i);
