@@ -18,7 +18,6 @@ float h=WinHei;
 float angleX=0;
 float angleY=0;
 float angleZ=0;
-
 int direction=0;
 hexopod H(bodysize,dcenleg,L,ang,servo_border,pin,I0,dir);
 void draw_string_bitmap(void *font, const char* string)
