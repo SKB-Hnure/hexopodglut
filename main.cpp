@@ -20,6 +20,7 @@ float angleX=0;
 float angleY=0;
 float angleZ=0;
 int direction=0;
+bool stop=false;
 hexopod H(bodysize,dcenleg,L,ang,servo_border,pin,I0,dir);
 void draw_string_bitmap(void *font, const char* string)
 {
@@ -119,6 +120,11 @@ switch (key)
            if ((direction>180)&&(direction<360))
             direction--;
  break;
+ case (int)32:
+ if (!stop)
+  stop=true;
+  else stop=false;
+ break;
  }
 }
 void SKeyboard(int key, int x, int y)
@@ -147,7 +153,7 @@ if (key==GLUT_KEY_UP)
  {
  angleZ++;
  }
-}
+ }
 
 
 void output(char title[], float value, int x, int y)
@@ -212,7 +218,7 @@ glBegin(GL_TRIANGLES);
 glEnd();
 coordsys();
 for (int i=0;i<6;i++)
-H.step(direction,50,steptime,i);
+H.step(direction,50,steptime,i,stop);
 glPopMatrix();
 glutSwapBuffers();  //завершение функции рисования только для GLUT_DOUBLE
 }
