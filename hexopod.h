@@ -619,7 +619,13 @@ if (z[n].down)
         {
         z[n].down=false;
         z[n].stable=true;
+<<<<<<< HEAD
            clean();
+=======
+         if ((int)point[n].z%3==0)
+        servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+        clean();
+>>>>>>> c5e0ce7d9e212b84325c9eb115e31e701f0d4879
         it[n]=0;
          if ((n==0)||(n==4)||(n==5))
              {

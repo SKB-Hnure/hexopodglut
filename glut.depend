@@ -11,25 +11,24 @@
 	"send_data.h"
 	"littlehexconfig.h"
 
-1370385653 /usr/include/GL/glut.h
+1345736832 /usr/include/GL/glut.h
 	"freeglut_std.h"
 
-1370385653 /usr/include/GL/freeglut_std.h
-	<windows.h>
-	<OpenGL/gl.h>
-	<OpenGL/glu.h>
+1345736832 /usr/include/GL/freeglut_std.h
+	<Windows.h>
 	<GL/gl.h>
 	<GL/glu.h>
 	<stdlib.h>
 
-1387188724 /usr/include/GL/gl.h
+1387431046 /usr/include/GL/gl.h
 	"gl_mangle.h"
+	<stdlib.h>
 	<windows.h>
 	<GL/glext.h>
 
-1387188724 /usr/include/GL/gl_mangle.h
+1387431046 /usr/include/GL/gl_mangle.h
 
-1387188724 /usr/include/GL/glext.h
+1387431046 /usr/include/GL/glext.h
 	<windows.h>
 	<stddef.h>
 	<inttypes.h>
@@ -39,31 +38,31 @@
 	<stdint.h>
 	<inttypes.h>
 
-1381553386 /usr/include/inttypes.h
+1380551574 /usr/include/inttypes.h
 	<features.h>
 	<stdint.h>
 	<stddef.h>
 
-1381553367 /usr/include/features.h
-	<stdc-predef.h>
+1380551550 /usr/include/features.h
+	<bits/predefs.h>
 	<sys/cdefs.h>
 	<gnu/stubs.h>
 
 1381553367 /usr/include/stdc-predef.h
 	<bits/predefs.h>
 
-1381553387 /usr/include/stdint.h
+1380551574 /usr/include/stdint.h
 	<features.h>
 	<bits/wchar.h>
 	<bits/wordsize.h>
 
-1382363599 /usr/include/GL/glu.h
+1387431044 /usr/include/GL/glu.h
 	"glu_mangle.h"
 	<GL/gl.h>
 
-1382363599 /usr/include/GL/glu_mangle.h
+1387431044 /usr/include/GL/glu_mangle.h
 
-1381553386 /usr/include/stdlib.h
+1380551574 /usr/include/stdlib.h
 	<features.h>
 	<stddef.h>
 	<bits/waitflags.h>
@@ -71,13 +70,12 @@
 	<xlocale.h>
 	<sys/types.h>
 	<alloca.h>
-	<bits/stdlib-float.h>
 	<bits/stdlib.h>
 	<bits/stdlib-ldbl.h>
 
-1381553368 /usr/include/xlocale.h
+1380551552 /usr/include/xlocale.h
 
-1381553387 /usr/include/alloca.h
+1380551574 /usr/include/alloca.h
 	<features.h>
 	<stddef.h>
 
@@ -130,7 +128,7 @@
 	<math.h>
 	"сonvertation.h"
 
-1381553385 /usr/include/math.h
+1380551571 /usr/include/math.h
 	<features.h>
 	<bits/huge_val.h>
 	<bits/huge_valf.h>
@@ -144,7 +142,7 @@
 	<bits/mathinline.h>
 	<bits/math-finite.h>
 
-1381553389 /usr/include/string.h
+1380551578 /usr/include/string.h
 	<features.h>
 	<stddef.h>
 	<xlocale.h>
@@ -152,7 +150,7 @@
 	<bits/string2.h>
 	<bits/string3.h>
 
-1381553388 /usr/include/stdio.h
+1380551576 /usr/include/stdio.h
 	<features.h>
 	<stddef.h>
 	<bits/types.h>
@@ -165,7 +163,7 @@
 	<bits/stdio2.h>
 	<bits/stdio-ldbl.h>
 
-1381553388 /usr/include/libio.h
+1380551576 /usr/include/libio.h
 	<_G_config.h>
 	<stdarg.h>
 	<sys/cdefs.h>
@@ -173,13 +171,13 @@
 	<shlib-compat.h>
 	<bits/libio-ldbl.h>
 
-1381553388 /usr/include/_G_config.h
+1380551576 /usr/include/_G_config.h
 	<bits/types.h>
 	<stddef.h>
 	<wchar.h>
 	<gconv.h>
 
-1381553390 /usr/include/wchar.h
+1380551579 /usr/include/wchar.h
 	<features.h>
 	<stdio.h>
 	<stdarg.h>
@@ -193,27 +191,27 @@
 	<bits/wchar2.h>
 	<bits/wchar-ldbl.h>
 
-1381553395 /usr/include/wctype.h
+1380551589 /usr/include/wctype.h
 	<features.h>
 	<bits/types.h>
 	<wchar.h>
 	<endian.h>
 	<xlocale.h>
 
-1381553389 /usr/include/endian.h
+1380551578 /usr/include/endian.h
 	<features.h>
 	<bits/endian.h>
 	<bits/byteswap.h>
 
-1381553367 /usr/include/gconv.h
+1380551551 /usr/include/gconv.h
 	<features.h>
 	<wchar.h>
 	<stddef.h>
 
-1381553392 /usr/include/getopt.h
+1380551584 /usr/include/getopt.h
 	<ctype.h>
 
-1381553383 /usr/include/ctype.h
+1380551568 /usr/include/ctype.h
 	<features.h>
 	<bits/types.h>
 	<endian.h>
@@ -227,7 +225,7 @@
 	<termios.h>
 	<string.h>
 
-1381553392 /usr/include/unistd.h
+1380551584 /usr/include/unistd.h
 	<features.h>
 	<bits/posix_opt.h>
 	<bits/environments.h>
@@ -237,15 +235,15 @@
 	<getopt.h>
 	<bits/unistd.h>
 
-1381553392 /usr/include/fcntl.h
+1380551585 /usr/include/fcntl.h
 	<features.h>
-	<bits/types.h>
 	<bits/fcntl.h>
+	<bits/types.h>
 	<time.h>
 	<bits/stat.h>
 	<bits/fcntl2.h>
 
-1381553390 /usr/include/time.h
+1380551581 /usr/include/time.h
 	<features.h>
 	<stddef.h>
 	<bits/time.h>
@@ -256,11 +254,11 @@
 	<bits/types.h>
 	<xlocale.h>
 
-1381553387 /usr/include/errno.h
+1380551574 /usr/include/errno.h
 	<features.h>
 	<bits/errno.h>
 
-1381553393 /usr/include/termios.h
+1380551585 /usr/include/termios.h
 	<features.h>
 	<bits/types.h>
 	<bits/termios.h>
@@ -293,12 +291,20 @@
 1390480246 /home/shark/robotics/projects/hexapod/hexopodglut/сonvertation.h
 	<string.h>
 
+<<<<<<< HEAD
 1390490594 /home/shark/robotics/projects/hexapod/hexopodglut/hexopod.h
+=======
+1390505622 /home/shark/robotics/projects/hexapod/hexopodglut/hexopod.h
+>>>>>>> c5e0ce7d9e212b84325c9eb115e31e701f0d4879
 	<string.h>
 	"three_angles.h"
 	"send_data.h"
 
+<<<<<<< HEAD
 1390480246 /home/shark/robotics/projects/hexapod/hexopodglut/send_data.h
+=======
+1390504841 /home/shark/robotics/projects/hexapod/hexopodglut/send_data.h
+>>>>>>> c5e0ce7d9e212b84325c9eb115e31e701f0d4879
 	<iostream>
 	<unistd.h>
 	<fcntl.h>
@@ -310,5 +316,8 @@
 
 1390503287 /home/shark/robotics/projects/hexapod/hexopodglut/littlehexconfig.h
 
+<<<<<<< HEAD
 1390503813 /home/diana/Programms/codeblocks/glut/littlehexconfig.h
 
+=======
+>>>>>>> c5e0ce7d9e212b84325c9eb115e31e701f0d4879

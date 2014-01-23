@@ -153,7 +153,11 @@ if (key==GLUT_KEY_UP)
  {
  angleZ++;
  }
+<<<<<<< HEAD
  }
+=======
+}
+>>>>>>> c5e0ce7d9e212b84325c9eb115e31e701f0d4879
 
 
 void output(char title[], float value, int x, int y)
@@ -218,7 +222,11 @@ glBegin(GL_TRIANGLES);
 glEnd();
 coordsys();
 for (int i=0;i<6;i++)
+<<<<<<< HEAD
 H.step(direction,50,steptime,i,stop);
+=======
+H.step(direction,50,steptime,i);
+>>>>>>> c5e0ce7d9e212b84325c9eb115e31e701f0d4879
 glPopMatrix();
 glutSwapBuffers();  //завершение функции рисования только для GLUT_DOUBLE
 }
