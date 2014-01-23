@@ -28,8 +28,8 @@ if ( tcgetattr ( fd, &tty ) != 0 )
 {
 cout << "Error " << errno << " from tcgetattr: " << strerror(errno) << endl;
 }
-cfsetospeed (&tty, (speed_t)B115200);
-cfsetispeed (&tty, (speed_t)B115200);
+cfsetospeed (&tty, (speed_t)B9600);
+cfsetispeed (&tty, (speed_t)B9600);
    tcflush(fd,TCIFLUSH);
    int n = write(fd, st,length);
     if (n < 0)

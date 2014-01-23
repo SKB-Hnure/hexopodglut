@@ -290,12 +290,12 @@
 1390480246 /home/shark/robotics/projects/hexapod/hexopodglut/сonvertation.h
 	<string.h>
 
-1390490594 /home/shark/robotics/projects/hexapod/hexopodglut/hexopod.h
+1390505622 /home/shark/robotics/projects/hexapod/hexopodglut/hexopod.h
 	<string.h>
 	"three_angles.h"
 	"send_data.h"
 
-1390480246 /home/shark/robotics/projects/hexapod/hexopodglut/send_data.h
+1390504841 /home/shark/robotics/projects/hexapod/hexopodglut/send_data.h
 	<iostream>
 	<unistd.h>
 	<fcntl.h>
