@@ -10,6 +10,7 @@
 //#include "littlehexconfig.h"
 #include "bighexconfig.h"
 using namespace std;
+
 float WinWid=1300.0;
 float WinHei=800;
 float WinDeep=800;
