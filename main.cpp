@@ -7,7 +7,7 @@
 #include "сonvertation.h"
 #include "hexopod.h"
 #include "send_data.h"
-
+//here is unnessesary comment
 using namespace std;
 
 float WinWid=1300.0;
