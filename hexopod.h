@@ -37,8 +37,8 @@ int max;
       int I0[6][3];                       //нулевые положения серводвигателей (к чему прибавлять угол)
       float delay;
       int dir[6][3];
-      int points_num=0;
-      char *path="/home/diana/file.txt";
+      int points_num;
+      char path[64];
       bool firstcall;
       int dcenleg;
 axval find_point0(int n)
@@ -122,6 +122,9 @@ if ((angle>180)&&(angle<=270))                                            // III
 }
       hexopod(axval body_size, int shcenleg, axval leg_element_size[3],axval angles[3][6], extreme_values b[6][3],int p[6][3], int o[6][3],int dir_servo[6][3])
               {
+                  memset(path,'\0',64);
+                  strcpy(path,"/home/diana/file.txt");
+                  points_num=0;
               bodysize=body_size;
               dcenleg=shcenleg;
               for (int i=0;i<6;i++)
@@ -253,7 +256,10 @@ void append(int Q1, int Q2, int Q3, int pin[3])           //добавление
 ofstream f(path, ios_base::app);
 char *st=new char[50];
 st=create_string(Q1,Q2,Q3,pin[0],pin[1],pin[2],delay);
-sends("/dev/ttyUSB4",st,strlen(st));
+char port[32];
+memset(port,'\0',32);
+strcpy(port,"/dev/ttyACM0");
+sends(port,st,strlen(st));
 f<<st<<"\n";
 st=NULL;
 delete st;
