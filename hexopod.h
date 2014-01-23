@@ -354,6 +354,7 @@ dstep=(float)time/(2*(abs(x1-p0[n].x)+2*abs(p0[n].z-rz)));
           point[n].y=(y1-p0[n].y)*(float)(point[n].x-p0[n].x)/(x1-p0[n].x)+p0[n].y;
           point[n].z=p0[n].z;
           topoint(transpoint(point[n],shift),n);
+          if ((int)point[n].x%2==0)
           servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
           if (point[n].x<=x1)
            {
@@ -379,6 +380,7 @@ dstep=(float)time/(2*(abs(x1-p0[n].x)+2*abs(p0[n].z-rz)));
          point[n].y=(y1-p0[n].y)* (float) (point[n].x-p0[n].x)/(x1-p0[n].x)+p0[n].y;
          point[n].z=rz;
           topoint(transpoint(point[n],shift),n);
+         if ((int)point[n].x%2==0)
           servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
          if (point[n].x>=p0[n].x)
           {
@@ -396,6 +398,7 @@ if ((angle>0)&&(angle<=180))
          point[n].y=(y1-p0[n].y)*(float)(point[n].x-p0[n].x)/(x1-p0[n].x)+p0[n].y;
          point[n].z=p0[n].z;
           topoint(transpoint(point[n],shift),n);
+           if ((int)point[n].x%2==0)
           servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
          if (point[n].x>=x1)
           {
@@ -410,6 +413,7 @@ if ((angle>0)&&(angle<=180))
           point[n].y=(y1-p0[n].y)*(float)(point[n].x-p0[n].x)/(x1-p0[n].x)+p0[n].y;
           point[n].z=rz;
           topoint(transpoint(point[n],shift),n);
+           if ((int)point[n].x%2==0)
           servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
            if (point[n].x<=p0[n].x)
             {
@@ -433,6 +437,7 @@ dstep=(float)time/(2*(abs(y1-p0[n].y)+2*abs(p0[n].z-rz)));
           point[n].x=(x1-p0[n].x)*(float)(point[n].y-p0[n].y)/(y1-p0[n].y)+p0[n].x;
           point[n].z=p0[n].z;
           topoint(transpoint(point[n],shift),n);
+           if ((int)point[n].y%2==0)
           servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
          if (point[n].y>=y1)
           {
@@ -447,6 +452,7 @@ dstep=(float)time/(2*(abs(y1-p0[n].y)+2*abs(p0[n].z-rz)));
               point[n].y-=dstep;
               point[n].x=(x1-p0[n].x)*(float)(point[n].y-p0[n].y)/(y1-p0[n].y)+p0[n].x;
           topoint(transpoint(point[n],shift),n);
+           if ((int)point[n].y%2==0)
               servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
               if (point[n].y<=p0[n].y)
               {
@@ -464,6 +470,7 @@ dstep=(float)time/(2*(abs(y1-p0[n].y)+2*abs(p0[n].z-rz)));
           point[n].x=(x1-p0[n].x)*(float)(point[n].y-p0[n].y)/(y1-p0[n].y)+p0[n].x;
           point[n].z=p0[n].z;
           topoint(transpoint(point[n],shift),n);
+           if ((int)point[n].y%2==0)
          servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
          if (point[n].y<=y1)
           {
@@ -478,6 +485,7 @@ dstep=(float)time/(2*(abs(y1-p0[n].y)+2*abs(p0[n].z-rz)));
               point[n].y+=dstep;
               point[n].x=(x1-p0[n].x)*(float)(point[n].y-p0[n].y)/(y1-p0[n].y)+p0[n].x;
           topoint(transpoint(point[n],shift),n);
+           if ((int)point[n].y%2==0)
               servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
               if (point[n].y>=p0[n].y)
               {
@@ -497,6 +505,7 @@ if (z[n].down)
         {
         z[n].down=false;
         z[n].stable=true;
+         if ((int)point[n].z%2==0)
         servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
         clean();
         it[n]=0;
@@ -506,6 +515,7 @@ if (z[n].down)
 {
   point[n].z-=dstep;
   topoint(transpoint(point[n],shift),n);
+   if ((int)point[n].z%2==0)
   servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
     if (point[n].z<=rz)
     {
@@ -515,5 +525,6 @@ if (z[n].down)
 }
 }
 };
+
 
 
