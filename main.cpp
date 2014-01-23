@@ -7,8 +7,8 @@
 #include "сonvertation.h"
 #include "hexopod.h"
 #include "send_data.h"
-//#include "littlehexconfig.h"
-#include "bighexconfig.h"
+#include "littlehexconfig.h"
+//#include "bighexconfig.h"
 using namespace std;
 
 float WinWid=1300.0;
