@@ -28,101 +28,100 @@ int max;
       axval L[3]; //габариты звеньев ноги
       axval ang0[3][6]; //углы поворота для нулевых точек
       axval ang[3][6]; //текущие углы наклона звеньев
-      axval point[6]; //текущие точки конца ноги
       axval p0[6]; //начальные центры концов ног
       leg_angles step_angles[500];  //[i] grad;
       extreme_values servo_border[6][3];  //крайние значения серводвигателей
-      axval p1[6];
       int pin[6][3];                      //номера пинов
       int I0[6][3];                       //нулевые положения серводвигателей (к чему прибавлять угол)
       float delay;
       int dir[6][3];
       int points_num;
       char path[64];
-      bool firstcall;
       int dcenleg;
-      int previos_angle;
-axval find_point0(int n)
+axval find_point0(int n)                             //нахождение начальной точки ноги n
 {
-axval point0, legbeg;
+axval point0, legbeg,legend;
+legend.x=cos(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(ang0[1][0].z))+L[2].x*cos(grad_to_rad(ang0[2][0].z-ang0[1][0].z)));
+legend.y=sin(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(ang0[1][0].z))+L[2].x*cos(grad_to_rad(ang0[2][0].z-ang0[1][0].z)));
+legend.z=L[1].x*sin(grad_to_rad(ang0[1][0].z))-L[2].x*sin(grad_to_rad(ang0[2][0].z-ang0[1][0].z));
 switch (n)
 {
 case 0:
 legbeg.x=bodysize.x/2-L[2].y;
 legbeg.y=0;
 legbeg.z=L[0].y;
-point0.x=legbeg.x+cos(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(ang0[1][0].z))+L[2].x*cos(grad_to_rad(ang0[2][0].z-ang0[1][0].z)));
-point0.y=legbeg.y+sin(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(ang0[1][0].z))+L[2].x*cos(grad_to_rad(ang0[2][0].z-ang0[1][0].z)));
-point0.z=legbeg.z-L[1].x*sin(grad_to_rad(ang0[1][0].z))+L[2].x*sin(grad_to_rad(ang0[2][0].z-ang0[1][0].z));
+point0.x=legbeg.x+legend.x;
+point0.y=legbeg.y+legend.y;
+point0.z=legbeg.z-legend.z;
 break;
 case 1:
 legbeg.x=bodysize.x/2;
 legbeg.y=0;
 legbeg.z=L[0].y;
-point0.x=legbeg.x-cos(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(ang0[1][0].z))+L[2].x*cos(grad_to_rad(ang0[2][0].z-ang0[1][0].z)));
-point0.y=legbeg.y+sin(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(ang0[1][0].z))+L[2].x*cos(grad_to_rad(ang0[2][0].z-ang0[1][0].z)));
-point0.z=legbeg.z-L[1].x*sin(grad_to_rad(ang0[1][0].z))+L[2].x*sin(grad_to_rad(ang0[2][0].z-ang0[1][0].z));
+point0.x=legbeg.x-legend.x;
+point0.y=legbeg.y+legend.y;
+point0.z=legbeg.z-legend.z;
 break;
 case 2:
 legbeg.x=bodysize.x/2-L[2].y;
 legbeg.y=bodysize.z/2;
 legbeg.z=L[0].y;
-point0.x=legbeg.x+cos(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(ang0[1][0].z))+L[2].x*cos(grad_to_rad(ang0[2][0].z-ang0[1][0].z)));
-point0.y=legbeg.y-sin(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(ang0[1][0].z))+L[2].x*cos(grad_to_rad(ang0[2][0].z-ang0[1][0].z)));
-point0.z=legbeg.z-L[1].x*sin(grad_to_rad(ang0[1][0].z))+L[2].x*sin(grad_to_rad(ang0[2][0].z-ang0[1][0].z));
+point0.x=legbeg.x+legend.x;
+point0.y=legbeg.y-legend.y;
+point0.z=legbeg.z-legend.z;
 break;
 case 3:
 legbeg.x=bodysize.x/2-L[2].y;
 legbeg.y=bodysize.z/2;
 legbeg.z=L[0].y;
-point0.x=legbeg.x+cos(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(ang0[1][0].z))+L[2].x*cos(grad_to_rad(ang0[2][0].z-ang0[1][0].z)));
-point0.y=legbeg.y+sin(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(ang0[1][0].z))+L[2].x*cos(grad_to_rad(ang0[2][0].z-ang0[1][0].z)));
-point0.z=legbeg.z-L[1].x*sin(grad_to_rad(ang0[1][0].z))+L[2].x*sin(grad_to_rad(ang0[2][0].z-ang0[1][0].z));
+point0.x=legbeg.x+legend.x;
+point0.y=legbeg.y+legend.y;
+point0.z=legbeg.z-legend.z;
 break;
 case 4:
 legbeg.x=bodysize.x/2;
 legbeg.y=bodysize.z/2;
 legbeg.z=L[0].y;
-point0.x=legbeg.x-cos(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(ang0[1][0].z))+L[2].x*cos(grad_to_rad(ang0[2][0].z-ang0[1][0].z)));
-point0.y=legbeg.y-sin(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(ang0[1][0].z))+L[2].x*cos(grad_to_rad(ang0[2][0].z-ang0[1][0].z)));
-point0.z=legbeg.z-L[1].x*sin(grad_to_rad(ang0[1][0].z))+L[2].x*sin(grad_to_rad(ang0[2][0].z-ang0[1][0].z));
+point0.x=legbeg.x-legend.x;
+point0.y=legbeg.y-legend.y;
+point0.z=legbeg.z-legend.z;
 break;
 case 5:
 legbeg.x=bodysize.x/2;
 legbeg.y=bodysize.z/2;
 legbeg.z=L[0].y;
-point0.x=legbeg.x-cos(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(ang0[1][0].z))+L[2].x*cos(grad_to_rad(ang0[2][0].z-ang0[1][0].z)));
-point0.y=legbeg.y+sin(grad_to_rad(ang0[0][0].x))*(L[0].x+L[1].x*cos(grad_to_rad(ang0[1][0].z))+L[2].x*cos(grad_to_rad(ang0[2][0].z-ang0[1][0].z)));
-point0.z=legbeg.z-L[1].x*sin(grad_to_rad(ang0[1][0].z))+L[2].x*sin(grad_to_rad(ang0[2][0].z-ang0[1][0].z));
+point0.x=legbeg.x-legend.x;
+point0.y=legbeg.y+legend.y;
+point0.z=legbeg.z-legend.z;
 break;
 }
 return point0;
 }
-void endstep(float angle, float steplong, float anr)
+
+axval endstep(float angle, float steplong, float anr, int n)
 {
-for (int n=0;n<6;n++)
-{
+axval p1;
 if ((angle>=0)&&(angle<=90))                                            // I
       {
-      p1[n].x=steplong*sin(anr)+p0[n].x;
-      p1[n].y=-steplong*cos(anr)+p0[n].y;
+      p1.x=steplong*sin(anr)+p0[n].x;
+      p1.y=-steplong*cos(anr)+p0[n].y;
          }
   if ((angle>90)&&(angle<=180))                                            // II
       {
-      p1[n].x=steplong*sin(Pi-anr)+p0[n].x;
-      p1[n].y=steplong*cos(Pi-anr)+p0[n].y;
+      p1.x=steplong*sin(Pi-anr)+p0[n].x;
+      p1.y=steplong*cos(Pi-anr)+p0[n].y;
       }
 if ((angle>180)&&(angle<=270))                                            // III
       {
-      p1[n].x=p0[n].x-steplong*sin(anr-Pi);
-      p1[n].y=p0[n].y+steplong*cos(anr-Pi);
+      p1.x=p0[n].x-steplong*sin(anr-Pi);
+      p1.y=p0[n].y+steplong*cos(anr-Pi);
       }
  if ((angle>270)&&(angle<360))                                                 //IV
       {
-      p1[n].x=p0[n].x-steplong*sin(2*Pi-anr);
-      p1[n].y=p0[n].y-steplong*cos(2*Pi-anr);
+      p1.x=p0[n].x-steplong*sin(2*Pi-anr);
+      p1.y=p0[n].y-steplong*cos(2*Pi-anr);
       }
-}
+return p1;
 }
       hexopod(axval body_size, int shcenleg, axval leg_element_size[3],axval angles[3][6], extreme_values b[6][3],int p[6][3], int o[6][3],int dir_servo[6][3])
               {
@@ -140,16 +139,13 @@ if ((angle>180)&&(angle<=270))                                            // III
                   I0[i][j]=o[i][j];
                   dir[i][j]=dir_servo[i][j];
                   servo_border[i][j]=b[i][j];
-                  previos_angle=361;
               }
               for(int i=0;i<3;i++)
               L[i]=leg_element_size[i];
               for(int i=0;i<6;i++)
               {
                 p0[i]=find_point0(i);
-                point[i]=p0[i];
                }
-               firstcall=true;
               }
 void parallelepiped(axval psize, axval angle, axval center)
 {
@@ -236,6 +232,13 @@ for (int i=0;i<6;i++)
 parallelepiped(L[j],ang[j][i],o[j][i]);
 glPopMatrix();
 }
+int group(int n)                                                 //возвращает номер группы, к которой пренадлежит нога
+{
+if ((n==0)||(n==4)||(n==5))
+ return 1;
+if ((n==1)||(n==2)||(n==3))
+ return 2;
+}
 void topoint(axval point,int n)
 {
 float a[3];
@@ -270,12 +273,8 @@ st=NULL;
 delete st;
 f.close();
 }
-void clean()
-{
-ofstream f(path, ios_base::trunc);
-f.close();
-}
-void servo_angles(float q1, float q2, float q3, int n)
+
+void servo_angles(float q1, float q2, float q3, int n)               //расчет углов для серводвигателей
 {
 int Q[3];
 if ((n==0)||(n==2)||(n==3))
@@ -306,11 +305,16 @@ return res;
 }
 void step(float angle, float steplong, float time, int n, bool stop)        //от primary direction
 {
+static axval point[6]; //текущие точки конца ноги
 float anr=grad_to_rad(angle);
 int rz=p0[n].z-40;
 static bool dir[6]={true, true,true,true,true,true};
-axval shift;
+static axval shift;
+static axval p1[6];                        //конечные точки шагов
 static int it[6];
+static int previos_angle=361;
+static bool firstcall=true;
+float dstep;
 struct state
  {
   bool up,down,stable;
@@ -335,9 +339,14 @@ shift.y=bodysize.z/2;
 shift.z=L[0].y;
 }
 if ((int)angle!=(int)previos_angle)
-endstep(angle,steplong,anr);
-      //нашли точки концов шага.
-if ((n>0)&&(n<4)&&(firstcall==true))
+{
+for(int i=0;i<6;i++)
+p1[i]=endstep(angle,steplong,anr,i);
+}
+if ((n==0)&&(firstcall==true))
+ for(int i=0;i<6;i++)
+    point[i]=p0[i];                                    //нашли точки концов шага.
+if ((n>0)&&(n<4)&&(firstcall==true))         //ставим ноги второй группы на начальные положения(в конец нижнего горизонтального передвижения)
 {
 point[n].x=p1[n].x;
 point[n].y=p1[n].y;
@@ -346,8 +355,6 @@ z[n].up=true;
 z[n].stable=false;
 if (n==3) firstcall=false;
 }
-float dstep;
-//cout<<"n="<<n<<";  ("<<p0[n].x<<";"<<p0[n].y<<";"<<p0[n].z<<")\n";
 if (abs(p1[n].x-p0[n].x)>=abs(p1[n].y-p0[n].y))
 {
 delay=(float) 2*time/(abs(p1[n].x-p0[n].x));
@@ -368,23 +375,23 @@ dstep=(float)time/(2*(abs(p1[n].x-p0[n].x)+2*abs(p0[n].z-rz)));
             dir[n]=false;
             z[n].up=true;
             z[n].stable=false;
-            if ((n==0)||(n==4)||(n==5))
+            if (group(n)==1) //для ног первой группы
              {
-             for (int i=1;i<=3;i++)
-             {
+              for (int i=1;i<=3;i++)
+              {
                 z[i].up=false;
                 z[i].down=false;
                 z[i].stable=true;
                 dir[i]=true;
                 point[i].x=p0[i].x;
                 point[i].y=p0[i].y;
+              }
              }
-             }
-           if ((n==1)||(n==2)||(n==3))
+           if (group(n)==2)             //для ног второй группы
              {
              for (int i=0;i<6;i++)
              {
-              if ((i==0)||(i==4)||(i==5))
+              if (group(i)==1)
               {
                 z[i].up=true;
                 z[i].down=false;
@@ -431,7 +438,7 @@ if ((angle>0)&&(angle<=180))
             dir[n]=false;
             z[n].up=true;
             z[n].stable=false;
-             if ((n==0)||(n==4)||(n==5))
+             if (group(n)==1)
              {
              for (int i=1;i<=3;i++)
              {
@@ -443,11 +450,11 @@ if ((angle>0)&&(angle<=180))
                 point[i].y=p0[i].y;
              }
              }
-           if ((n==1)||(n==2)||(n==3))
+           if (group(n)==2)
              {
              for (int i=0;i<6;i++)
              {
-              if ((i==0)||(i==4)||(i==5))
+              if (group(i)==1)
               {
                 z[i].up=true;
                 z[i].down=false;
@@ -499,7 +506,7 @@ dstep=(float)time/(2*(abs(p1[n].y-p0[n].y)+2*abs(p0[n].z-rz)));
             dir[n]=false;
             z[n].up=true;
             z[n].stable=false;
-             if ((n==0)||(n==4)||(n==5))
+             if (group(n)==1)
              {
              for (int i=1;i<=3;i++)
              {
@@ -511,11 +518,11 @@ dstep=(float)time/(2*(abs(p1[n].y-p0[n].y)+2*abs(p0[n].z-rz)));
                 point[i].y=p0[i].y;
              }
              }
-           if ((n==1)||(n==2)||(n==3))
+           if (group(n)==2)
              {
              for (int i=0;i<6;i++)
              {
-              if ((i==0)||(i==4)||(i==5))
+              if (group(i)==1)
               {
                 z[i].up=true;
                 z[i].down=false;
@@ -561,7 +568,7 @@ dstep=(float)time/(2*(abs(p1[n].y-p0[n].y)+2*abs(p0[n].z-rz)));
             dir[n]=false;
             z[n].up=true;
             z[n].stable=false;
-             if ((n==0)||(n==4)||(n==5))
+             if (group(n)==1)
              {
              for (int i=1;i<=3;i++)
              {
@@ -573,11 +580,11 @@ dstep=(float)time/(2*(abs(p1[n].y-p0[n].y)+2*abs(p0[n].z-rz)));
                 point[i].y=p0[i].y;
              }
              }
-           if ((n==1)||(n==2)||(n==3))
+           if (group(n)==2)
              {
              for (int i=0;i<6;i++)
              {
-              if ((i==0)||(i==4)||(i==5))
+              if (group(i)==1)
               {
                 z[i].up=true;
                 z[i].down=false;
@@ -619,9 +626,9 @@ if (z[n].down)
         {
         z[n].down=false;
         z[n].stable=true;
-           clean();
+           clean(path);
         it[n]=0;
-         if ((n==0)||(n==4)||(n==5))
+         if (group(n)==1)
              {
              for (int i=1;i<=3;i++)
              {
@@ -634,11 +641,11 @@ if (z[n].down)
                     point[i].z=p0[i].z;
              }
              }
-        if ((n==1)||(n==2)||(n==3))
+        if (group(n)==2)
              {
              for (int i=0;i<6;i++)
              {
-              if ((i==0)||(i==4)||(i==5))
+              if (group(i)==1)
               {
                     z[i].up=true;
                     z[i].down=false;

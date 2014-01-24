@@ -219,7 +219,7 @@
 	<endian.h>
 	<xlocale.h>
 
-1390504739 /home/diana/Programms/codeblocks/glut/send_data.h
+1390591602 /home/diana/Programms/codeblocks/glut/send_data.h
 	<iostream>
 	<unistd.h>
 	<fcntl.h>
@@ -266,7 +266,7 @@
 	<bits/termios.h>
 	<sys/ttydefaults.h>
 
-1390521067 /home/diana/Programms/codeblocks/glut/hexopod.h
+1390604173 /home/diana/Programms/codeblocks/glut/hexopod.h
 	<string.h>
 	"three_angles.h"
 	"send_data.h"

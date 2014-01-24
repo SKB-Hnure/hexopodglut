@@ -58,4 +58,24 @@ strcat(f,"\n\r");
 return f;
 }
 
+void clean(char path[64])                                                         //очистка файла
+{
+ofstream f(path, ios_base::trunc);
+f.close();
+}
+void append(int Q1, int Q2, int Q3, int pin[3],int delay, char path[64])           //добавление строки в конец файла
+{
+ofstream f(path, ios_base::app);
+char *st=new char[50];
+st=create_string(Q1,Q2,Q3,pin[0],pin[1],pin[2],delay);
+char port[32];
+memset(port,'\0',32);
+strcpy(port,"/dev/ttyACM0");
+sends(port,st,strlen(st));
+f<<st<<"\n";
+st=NULL;
+delete st;
+f.close();
+}
+
 #endif // SEND_DATA_H_INCLUDED
