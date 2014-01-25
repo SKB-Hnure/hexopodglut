@@ -359,6 +359,7 @@ if (n==3) firstcall=false;
 if (abs(p1[n].x-p0[n].x)>=abs(p1[n].y-p0[n].y))
 {
 delay=(float) 2*time/(abs(p1[n].x-p0[n].x));
+//delay=100;
 dstep=(float)time/(2*(abs(p1[n].x-p0[n].x)+2*abs(p0[n].z-rz)));
         if ((angle>180)&&(angle<360))
         {
@@ -496,6 +497,7 @@ else
 if (abs(p1[n].x-p0[n].x)<abs(p1[n].y-p0[n].y))
 {
 delay=(float)2*time/(abs(p1[n].y-p0[n].y));
+//delay=100;
 dstep=(float)time/(2*(abs(p1[n].y-p0[n].y)+2*abs(p0[n].z-rz)));
         if ((angle>=90)&&(angle<270))
     {
