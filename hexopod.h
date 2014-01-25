@@ -315,6 +315,7 @@ static int it[6];
 static int previos_angle=361;
 static bool firstcall=true;
 float dstep;
+static bool output[6]={true,true,true,true,true,true};
 struct state
  {
   bool up,down,stable;
@@ -363,15 +364,19 @@ dstep=(float)time/(2*(abs(p1[n].x-p0[n].x)+2*abs(p0[n].z-rz)));
         {
            if ((point[n].x>=p1[n].x)&&(dir[n]==true)&&(z[n].stable))
          {
-          if (!stop)
-          point[n].x--;
           point[n].y=(p1[n].y-p0[n].y)*(float)(point[n].x-p0[n].x)/(p1[n].x-p0[n].x)+p0[n].y;
           point[n].z=p0[n].z;
           topoint(transpoint(point[n],shift),n);
-          if ((int)point[n].x%3==0)
-          servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+            if (output[n])                                           //вывод когда output
+          {
+         servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+          output[n]=false;
+          }
+          if (!stop)
+          point[n].x--;
           if (point[n].x<=p1[n].x)
            {
+           output[n]=true;                         //для вывода в  начале подъема
             dir[n]=false;
             z[n].up=true;
             z[n].stable=false;
@@ -406,15 +411,14 @@ dstep=(float)time/(2*(abs(p1[n].x-p0[n].x)+2*abs(p0[n].z-rz)));
              }
         if ((point[n].x<=p0[n].x)&&(dir[n]==false)&&(z[n].stable))
          {
-         if (!stop)
-         point[n].x+=dstep;
          point[n].y=(p1[n].y-p0[n].y)* (float) (point[n].x-p0[n].x)/(p1[n].x-p0[n].x)+p0[n].y;
          point[n].z=rz;
           topoint(transpoint(point[n],shift),n);
-         if ((int)point[n].x%3==0)
-          servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+          if (!stop)
+         point[n].x+=dstep;
          if (point[n].x>=p0[n].x)
           {
+            output[n]=true;                      //для вывода в начале спуска
             dir[n]=true;
             z[n].down=true;
             z[n].stable=false;
@@ -426,15 +430,19 @@ if ((angle>0)&&(angle<=180))
         {
            if ((point[n].x<p1[n].x)&&(dir[n]==true)&&(z[n].stable))
          {
-         if (!stop)
-         point[n].x++;
          point[n].y=(p1[n].y-p0[n].y)*(float)(point[n].x-p0[n].x)/(p1[n].x-p0[n].x)+p0[n].y;
          point[n].z=p0[n].z;
           topoint(transpoint(point[n],shift),n);
-           if ((int)point[n].x%3==0)
-          servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+             if (output[n])                                           //вывод когда output
+          {
+         servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+          output[n]=false;
+          }
+          if (!stop)
+         point[n].x++;
          if (point[n].x>=p1[n].x)
           {
+            output[n]=true;                         //для вывода в  начале подъема
             dir[n]=false;
             z[n].up=true;
             z[n].stable=false;
@@ -469,15 +477,14 @@ if ((angle>0)&&(angle<=180))
            }
            if ((point[n].x>p0[n].x)&&(dir[n]==false)&&(z[n].stable))
          {
-         if (!stop)
-          point[n].x-=dstep;
           point[n].y=(p1[n].y-p0[n].y)*(float)(point[n].x-p0[n].x)/(p1[n].x-p0[n].x)+p0[n].y;
           point[n].z=rz;
           topoint(transpoint(point[n],shift),n);
-           if ((int)point[n].x%3==0)
-          servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+             if (!stop)
+          point[n].x-=dstep;
            if (point[n].x<=p0[n].x)
             {
+             output[n]=true;                      //для вывода в начале спуска
              dir[n]=true;
              z[n].down=true;
              z[n].stable=false;
@@ -494,15 +501,19 @@ dstep=(float)time/(2*(abs(p1[n].y-p0[n].y)+2*abs(p0[n].z-rz)));
     {
          if ((point[n].y<p1[n].y)&&(dir[n]==true)&&(z[n].stable))
         {
-        if (!stop)
-          point[n].y++;
           point[n].x=(p1[n].x-p0[n].x)*(float)(point[n].y-p0[n].y)/(p1[n].y-p0[n].y)+p0[n].x;
           point[n].z=p0[n].z;
           topoint(transpoint(point[n],shift),n);
-           if ((int)point[n].y%3==0)
-          servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+            if (output[n])                                           //вывод когда output
+          {
+         servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+          output[n]=false;
+          }
+           if (!stop)
+          point[n].y++;
          if (point[n].y>=p1[n].y)
           {
+            output[n]=true;                         //для вывода в  начале подъема
             dir[n]=false;
             z[n].up=true;
             z[n].stable=false;
@@ -538,14 +549,13 @@ dstep=(float)time/(2*(abs(p1[n].y-p0[n].y)+2*abs(p0[n].z-rz)));
          if ((point[n].y>p0[n].y)&&(dir[n]==false)&&(z[n].stable))
         {
               point[n].z=rz;
-              if (!stop)
-              point[n].y-=dstep;
               point[n].x=(p1[n].x-p0[n].x)*(float)(point[n].y-p0[n].y)/(p1[n].y-p0[n].y)+p0[n].x;
           topoint(transpoint(point[n],shift),n);
-           if ((int)point[n].y%3==0)
-              servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+              if (!stop)
+              point[n].y-=dstep;
               if (point[n].y<=p0[n].y)
               {
+                output[n]=true;                      //для вывода в начале спуска
                dir[n]=true;
                z[n].stable=false;
                z[n].down=true;
@@ -556,15 +566,19 @@ dstep=(float)time/(2*(abs(p1[n].y-p0[n].y)+2*abs(p0[n].z-rz)));
         {
          if ((point[n].y>p1[n].y)&&(dir[n]==true)&&(z[n].stable))
          {
-         if (!stop)
-          point[n].y--;
           point[n].x=(p1[n].x-p0[n].x)*(float)(point[n].y-p0[n].y)/(p1[n].y-p0[n].y)+p0[n].x;
           point[n].z=p0[n].z;
           topoint(transpoint(point[n],shift),n);
-           if ((int)point[n].y%3==0)
+          if (output[n])                                           //вывод когда output
+          {
          servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+          output[n]=false;
+          }
+         if (!stop)
+          point[n].y--;
          if (point[n].y<=p1[n].y)
           {
+            output[n]=true;                         //для вывода в  начале подъема
             dir[n]=false;
             z[n].up=true;
             z[n].stable=false;
@@ -600,14 +614,13 @@ dstep=(float)time/(2*(abs(p1[n].y-p0[n].y)+2*abs(p0[n].z-rz)));
          if ((point[n].y<p0[n].y)&&(dir[n]==false)&&(z[n].stable))
         {
               point[n].z=rz;
-              if (!stop)
-              point[n].y+=dstep;
               point[n].x=(p1[n].x-p0[n].x)*(float)(point[n].y-p0[n].y)/(p1[n].y-p0[n].y)+p0[n].x;
           topoint(transpoint(point[n],shift),n);
-           if ((int)point[n].y%3==0)
-              servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+              if (!stop)
+              point[n].y+=dstep;
               if (point[n].y>=p0[n].y)
               {
+               output[n]=true;                      //для вывода в начале спуска
                dir[n]=true;
                z[n].stable=false;
                z[n].down=true;
@@ -617,16 +630,39 @@ dstep=(float)time/(2*(abs(p1[n].y-p0[n].y)+2*abs(p0[n].z-rz)));
 }
 if (z[n].down)
   {
-  if (!stop)
-     point[n].z+=dstep;
           topoint(transpoint(point[n],shift),n);
-       if ((int)point[n].z%3==0)
-        servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+       if (output[n])                                                        //вывод в начале спуска
+  servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+      output[n]=false;
+        if (!stop)
+       point[n].z+=dstep;
+       if (point[n].z+dstep>=p0[n].z)
+       {
+        for (int i=0;i<6;i++)
+    {
+  if (group(n)==1)
+    if ((group(i)==2)&&(i<n))
+    output[i]=true;
+  if (group(n)==2)
+    if ((group(i)==1)&&(i<n))
+     output[i]=true;
+    }
+       }
        if (point[n].z>=p0[n].z)
         {
+        output[n]=true;                       //для вывода в начале горизонтального нижнего движения
+         for (int i=0;i<6;i++)
+    {
+  if (group(n)==1)
+    if ((group(i)==2)&&(i>n))
+    output[i]=true;
+  if (group(n)==2)
+    if ((group(i)==1)&&(i>n))
+     output[i]=true;
+    }
         z[n].down=false;
         z[n].stable=true;
-           clean(path);
+          // clean(path);
         it[n]=0;
          if (group(n)==1)
              {
@@ -660,18 +696,44 @@ if (z[n].down)
     }
  if (z[n].up)
 {
-if (!stop)
-  point[n].z-=dstep;
   topoint(transpoint(point[n],shift),n);
-   if ((int)point[n].z%3==0)
+    if (output[n])
+    {                                         //вывод в начале подьема (конце нижнего горизонтального движения)
   servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+  output[n]=false;
+    }
+  if (!stop)
+  point[n].z-=dstep;
+  if (point[n].z-dstep<=rz)                //в следующем блоке для ног другой группы должны вывестись значения
+        {
+        for (int i=0;i<6;i++)
+    {
+  if (group(n)==1)
+    if ((group(i)==2)&&(i<n))
+    output[i]=true;
+  if (group(n)==2)
+    if ((group(i)==1)&&(i<n))
+     output[i]=true;
+    }
+       }
     if (point[n].z<=rz)
     {
+     servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);       //вывод в конце подъема
+      for (int i=0;i<6;i++)
+    {
+  if (group(n)==1)
+    if ((group(i)==2)&&(i>n))
+    output[i]=true;
+  if (group(n)==2)
+    if ((group(i)==1)&&(i>n))
+     output[i]=true;
+    }
         z[n].up=false;
         z[n].stable=true;
      }
 }
 previos_angle=angle;
+
 }
 };
 
