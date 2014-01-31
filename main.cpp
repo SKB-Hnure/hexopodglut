@@ -218,7 +218,10 @@ glBegin(GL_TRIANGLES);
 glEnd();
 coordsys();
 for (int i=0;i<6;i++)
+{
 H.step(direction,50,steptime,i,stop);
+//usleep(10);
+}
 glPopMatrix();
 glutSwapBuffers();  //завершение функции рисования только для GLUT_DOUBLE
 }

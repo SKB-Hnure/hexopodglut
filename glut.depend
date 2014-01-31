@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1390520749 source:/home/diana/Programms/codeblocks/glut/main.cpp
+1391084742 source:/home/diana/Programms/codeblocks/glut/main.cpp
 	<GL/glut.h>
 	<stdlib.h>
 	<stdio.h>
@@ -22,14 +22,14 @@
 	<GL/glu.h>
 	<stdlib.h>
 
-1387188724 /usr/include/GL/gl.h
+1387569655 /usr/include/GL/gl.h
 	"gl_mangle.h"
 	<windows.h>
 	<GL/glext.h>
 
-1387188724 /usr/include/GL/gl_mangle.h
+1387569655 /usr/include/GL/gl_mangle.h
 
-1387188724 /usr/include/GL/glext.h
+1387569655 /usr/include/GL/glext.h
 	<windows.h>
 	<stddef.h>
 	<inttypes.h>
@@ -39,20 +39,19 @@
 	<stdint.h>
 	<inttypes.h>
 
-1381553386 /usr/include/inttypes.h
+1389836246 /usr/include/inttypes.h
 	<features.h>
 	<stdint.h>
 	<stddef.h>
 
-1381553367 /usr/include/features.h
+1389836228 /usr/include/features.h
 	<stdc-predef.h>
 	<sys/cdefs.h>
 	<gnu/stubs.h>
 
-1381553367 /usr/include/stdc-predef.h
-	<bits/predefs.h>
+1389836228 /usr/include/stdc-predef.h
 
-1381553387 /usr/include/stdint.h
+1389836246 /usr/include/stdint.h
 	<features.h>
 	<bits/wchar.h>
 	<bits/wordsize.h>
@@ -63,7 +62,7 @@
 
 1382363599 /usr/include/GL/glu_mangle.h
 
-1381553386 /usr/include/stdlib.h
+1389836246 /usr/include/stdlib.h
 	<features.h>
 	<stddef.h>
 	<bits/waitflags.h>
@@ -71,13 +70,14 @@
 	<xlocale.h>
 	<sys/types.h>
 	<alloca.h>
+	<bits/stdlib-bsearch.h>
 	<bits/stdlib-float.h>
 	<bits/stdlib.h>
 	<bits/stdlib-ldbl.h>
 
-1381553368 /usr/include/xlocale.h
+1389836229 /usr/include/xlocale.h
 
-1381553387 /usr/include/alloca.h
+1389836246 /usr/include/alloca.h
 	<features.h>
 	<stddef.h>
 
@@ -130,7 +130,7 @@
 	<math.h>
 	"сonvertation.h"
 
-1381553385 /usr/include/math.h
+1389836244 /usr/include/math.h
 	<features.h>
 	<bits/huge_val.h>
 	<bits/huge_valf.h>
@@ -144,7 +144,7 @@
 	<bits/mathinline.h>
 	<bits/math-finite.h>
 
-1381553389 /usr/include/string.h
+1389836248 /usr/include/string.h
 	<features.h>
 	<stddef.h>
 	<xlocale.h>
@@ -152,7 +152,7 @@
 	<bits/string2.h>
 	<bits/string3.h>
 
-1381553388 /usr/include/stdio.h
+1389836247 /usr/include/stdio.h
 	<features.h>
 	<stddef.h>
 	<bits/types.h>
@@ -165,7 +165,7 @@
 	<bits/stdio2.h>
 	<bits/stdio-ldbl.h>
 
-1381553388 /usr/include/libio.h
+1389836247 /usr/include/libio.h
 	<_G_config.h>
 	<stdarg.h>
 	<sys/cdefs.h>
@@ -173,13 +173,13 @@
 	<shlib-compat.h>
 	<bits/libio-ldbl.h>
 
-1381553388 /usr/include/_G_config.h
+1389836247 /usr/include/_G_config.h
 	<bits/types.h>
 	<stddef.h>
 	<wchar.h>
 	<gconv.h>
 
-1381553390 /usr/include/wchar.h
+1389836249 /usr/include/wchar.h
 	<features.h>
 	<stdio.h>
 	<stdarg.h>
@@ -193,33 +193,33 @@
 	<bits/wchar2.h>
 	<bits/wchar-ldbl.h>
 
-1381553395 /usr/include/wctype.h
+1389836254 /usr/include/wctype.h
 	<features.h>
 	<bits/types.h>
 	<wchar.h>
 	<endian.h>
 	<xlocale.h>
 
-1381553389 /usr/include/endian.h
+1389836248 /usr/include/endian.h
 	<features.h>
 	<bits/endian.h>
 	<bits/byteswap.h>
 
-1381553367 /usr/include/gconv.h
+1389836229 /usr/include/gconv.h
 	<features.h>
 	<wchar.h>
 	<stddef.h>
 
-1381553392 /usr/include/getopt.h
+1389836251 /usr/include/getopt.h
 	<ctype.h>
 
-1381553383 /usr/include/ctype.h
+1389836242 /usr/include/ctype.h
 	<features.h>
 	<bits/types.h>
 	<endian.h>
 	<xlocale.h>
 
-1390591602 /home/diana/Programms/codeblocks/glut/send_data.h
+1391124897 /home/diana/Programms/codeblocks/glut/send_data.h
 	<iostream>
 	<unistd.h>
 	<fcntl.h>
@@ -227,7 +227,7 @@
 	<termios.h>
 	<string.h>
 
-1381553392 /usr/include/unistd.h
+1389836251 /usr/include/unistd.h
 	<features.h>
 	<bits/posix_opt.h>
 	<bits/environments.h>
@@ -237,7 +237,7 @@
 	<getopt.h>
 	<bits/unistd.h>
 
-1381553392 /usr/include/fcntl.h
+1389836251 /usr/include/fcntl.h
 	<features.h>
 	<bits/types.h>
 	<bits/fcntl.h>
@@ -245,7 +245,7 @@
 	<bits/stat.h>
 	<bits/fcntl2.h>
 
-1381553390 /usr/include/time.h
+1389836249 /usr/include/time.h
 	<features.h>
 	<stddef.h>
 	<bits/time.h>
@@ -256,17 +256,17 @@
 	<bits/types.h>
 	<xlocale.h>
 
-1381553387 /usr/include/errno.h
+1389836246 /usr/include/errno.h
 	<features.h>
 	<bits/errno.h>
 
-1381553393 /usr/include/termios.h
+1389836252 /usr/include/termios.h
 	<features.h>
 	<bits/types.h>
 	<bits/termios.h>
 	<sys/ttydefaults.h>
 
-1390691150 /home/diana/Programms/codeblocks/glut/hexopod.h
+1391129523 /home/diana/Programms/codeblocks/glut/hexopod.h
 	<string.h>
 	"three_angles.h"
 	"send_data.h"
@@ -310,5 +310,5 @@
 
 1390503287 /home/shark/robotics/projects/hexapod/hexopodglut/littlehexconfig.h
 
-1390503813 /home/diana/Programms/codeblocks/glut/littlehexconfig.h
+1391010484 /home/diana/Programms/codeblocks/glut/littlehexconfig.h
 

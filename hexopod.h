@@ -259,20 +259,7 @@ ang[2][n].z=-ang[2][n].z;
 }
 legs(bodysize);
 }
-void append(int Q1, int Q2, int Q3, int pin[3])           //добавление строки в конец файла
-{
-ofstream f(path, ios_base::app);
-char *st=new char[50];
-st=create_string(Q1,Q2,Q3,pin[0],pin[1],pin[2],delay);
-char port[32];
-memset(port,'\0',32);
-strcpy(port,"/dev/ttyACM0");
-sends(port,st,strlen(st));
-f<<st<<"\n";
-st=NULL;
-delete st;
-f.close();
-}
+
 
 void servo_angles(float q1, float q2, float q3, int n)               //расчет углов для серводвигателей
 {
@@ -293,7 +280,7 @@ if ((n==1)||(n==5)||(n==4))
  {
  Q[i]=allow_val(Q[i],servo_border[n][i]);
  }
- append(Q[0], Q[1], Q[2], pin[n]);
+ append(Q[0], Q[1], Q[2], pin[n], delay, path);
 }
 axval transpoint(axval point, axval shift)
 {
@@ -302,6 +289,12 @@ res.x=point.x-shift.x;
 res.y=point.y-shift.y;
 res.z=point.z-shift.z;
 return res;
+}
+int previos(int gr, int index)
+{
+for (int i=index-1;i>=0;i--)
+ if (group(i)==gr) return i;
+ return -1;
 }
 void step(float angle, float steplong, float time, int n, bool stop)        //от primary direction
 {
@@ -370,7 +363,7 @@ dstep=(float)time/(2*(abs(p1[n].x-p0[n].x)+2*abs(p0[n].z-rz)));
           topoint(transpoint(point[n],shift),n);
             if (output[n])                                           //вывод когда output
           {
-         servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+          servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
           output[n]=false;
           }
           if (!stop)
@@ -423,7 +416,6 @@ dstep=(float)time/(2*(abs(p1[n].x-p0[n].x)+2*abs(p0[n].z-rz)));
             dir[n]=true;
             z[n].down=true;
             z[n].stable=false;
-
            }
            }
         }
@@ -497,7 +489,6 @@ else
 if (abs(p1[n].x-p0[n].x)<abs(p1[n].y-p0[n].y))
 {
 delay=(float)2*time/(abs(p1[n].y-p0[n].y));
-//delay=100;
 dstep=(float)time/(2*(abs(p1[n].y-p0[n].y)+2*abs(p0[n].z-rz)));
         if ((angle>=90)&&(angle<270))
     {
@@ -557,7 +548,7 @@ dstep=(float)time/(2*(abs(p1[n].y-p0[n].y)+2*abs(p0[n].z-rz)));
               point[n].y-=dstep;
               if (point[n].y<=p0[n].y)
               {
-                output[n]=true;                      //для вывода в начале спуска
+               output[n]=true;                      //для вывода в начале спуска
                dir[n]=true;
                z[n].stable=false;
                z[n].down=true;
@@ -573,14 +564,15 @@ dstep=(float)time/(2*(abs(p1[n].y-p0[n].y)+2*abs(p0[n].z-rz)));
           topoint(transpoint(point[n],shift),n);
           if (output[n])                                           //вывод когда output
           {
-         servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+          servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+          cout<<"Вывод точки горизонтального нижнего перемещения"<<n<<"\n";
           output[n]=false;
           }
          if (!stop)
           point[n].y--;
          if (point[n].y<=p1[n].y)
           {
-            output[n]=true;                         //для вывода в  начале подъема
+         //   output[n]=true;                         //для вывода в  начале подъема
             dir[n]=false;
             z[n].up=true;
             z[n].stable=false;
@@ -620,9 +612,43 @@ dstep=(float)time/(2*(abs(p1[n].y-p0[n].y)+2*abs(p0[n].z-rz)));
           topoint(transpoint(point[n],shift),n);
               if (!stop)
               point[n].y+=dstep;
+              if ((point[n].y+dstep>=p0[n].y)&&(point[n].y<p0[n].y))
+              {
+               for (int i=0;i<6;i++)
+                {
+                  if (group(n)==1)
+                  if ((group(i)==2)&&(i<n)&&(i>previos(1,n)))
+                  {
+                  output[i]=true;
+                  cout<<"l0#"<<i<<"\n";
+                  }
+                  if (group(n)==2)
+                  if ((group(i)==1)&&(i<n)&&(i>previos(2,n)))
+                  {
+                  output[i]=true;
+                  cout<<"l1#"<<i<<"\n";
+                     }
+                }
+                }
               if (point[n].y>=p0[n].y)
               {
                output[n]=true;                      //для вывода в начале спуска
+               cout<<"l2#"<<n<<"\n";
+               for (int i=0;i<6;i++)
+                {
+                  if (group(n)==1)
+                  if ((group(i)==2)&&(i>n))
+                  {
+                  output[i]=true;
+                  cout<<"l3#"<<i<<"\n";
+                  }
+                  if (group(n)==2)
+                  if ((group(i)==1)&&(i>n))
+                  {
+                  output[i]=true;
+                  cout<<"l4#"<<i<<"\n";
+                  }
+                }
                dir[n]=true;
                z[n].stable=false;
                z[n].down=true;
@@ -632,44 +658,59 @@ dstep=(float)time/(2*(abs(p1[n].y-p0[n].y)+2*abs(p0[n].z-rz)));
 }
 if (z[n].down)
   {
-          topoint(transpoint(point[n],shift),n);
-       if (output[n])                                                        //вывод в начале спуска
-  servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+      topoint(transpoint(point[n],shift),n);
+      if (output[n])             //вывод в начале спуска
+      {
+      servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+      cout<<"Вывод точки начала движения вниз"<<n<<"\n";
       output[n]=false;
-        if (!stop)
-       point[n].z+=dstep;
-       if (point[n].z+dstep>=p0[n].z)
-       {
+      }
+      if (!stop)
+      point[n].z+=dstep;
+      if ((point[n].z+dstep>=p0[n].z)&&(point[n].z<p0[n].z))
         for (int i=0;i<6;i++)
-    {
-  if (group(n)==1)
-    if ((group(i)==2)&&(i<n))
-    output[i]=true;
-  if (group(n)==2)
-    if ((group(i)==1)&&(i<n))
-     output[i]=true;
-    }
-       }
+          {
+            if (group(n)==1)
+            if ((group(i)==2)&&(i<n)&&(i>previos(1,n)))
+            {
+             output[i]=true;
+             cout<<"l5#"<<i<<"(n="<<n<<")"<<"\n";
+             }
+            if (group(n)==2)
+            if ((group(i)==1)&&(i<n)&&(i>previos(2,n)))
+            {
+             output[i]=true;
+             cout<<"l6#"<<i<<"(n="<<n<<")"<<"\n";
+             }
+          }
        if (point[n].z>=p0[n].z)
         {
-        output[n]=true;                       //для вывода в начале горизонтального нижнего движения
-         for (int i=0;i<6;i++)
-    {
-  if (group(n)==1)
-    if ((group(i)==2)&&(i>n))
-    output[i]=true;
-  if (group(n)==2)
-    if ((group(i)==1)&&(i>n))
-     output[i]=true;
-    }
+      //  output[n]=true;                       //для вывода в начале горизонтального нижнего движения
+        servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+        cout<<"Вывод точки начала горизонтального нижнего перемещения"<<n<<"\n";
+        for (int i=0;i<6;i++)
+          {
+            if (group(n)==1)
+            if ((group(i)==2)&&(i>n))
+             {
+             output[i]=true;
+             cout<<"l7#"<<i<<"\n";
+             }
+            if (group(n)==2)
+            if ((group(i)==1)&&(i>n))
+             {
+             output[i]=true;
+             cout<<"l8#"<<i<<"\n";
+             }
+          }
         z[n].down=false;
         z[n].stable=true;
-          // clean(path);
+        // clean(path);
         it[n]=0;
          if (group(n)==1)
              {
              for (int i=1;i<=3;i++)
-             {
+                 {
                     z[i].up=true;
                     z[i].down=false;
                     z[i].stable=false;
@@ -677,7 +718,7 @@ if (z[n].down)
                     point[i].x=p1[i].x;
                     point[i].y=p1[i].y;
                     point[i].z=p0[i].z;
-             }
+                 }
              }
         if (group(n)==2)
              {
@@ -702,33 +743,47 @@ if (z[n].down)
     if (output[n])
     {                                         //вывод в начале подьема (конце нижнего горизонтального движения)
   servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+  cout<<"Вывод точки начала подъема"<<n<<"\n";
   output[n]=false;
     }
   if (!stop)
   point[n].z-=dstep;
-  if (point[n].z-dstep<=rz)                //в следующем блоке для ног другой группы должны вывестись значения
+  if ((point[n].z-dstep<=rz)&&(point[n].z>rz))                //в следующем блоке для ног другой группы должны вывестись значения
         {
         for (int i=0;i<6;i++)
     {
   if (group(n)==1)
-    if ((group(i)==2)&&(i<n))
-    output[i]=true;
+    if ((group(i)==2)&&(i<n)&&(i>previos(1,n)))
+     {
+             output[i]=true;
+             cout<<"l9#"<<i<<"\n";
+             }
   if (group(n)==2)
-    if ((group(i)==1)&&(i<n))
-     output[i]=true;
+    if ((group(i)==1)&&(i<n)&&(i>previos(2,n)))
+      {
+             output[i]=true;
+             cout<<"l10#"<<i<<"\n";
+             }
     }
        }
     if (point[n].z<=rz)
     {
      servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);       //вывод в конце подъема
+     cout<<"Вывод точки в конце подъема"<<n<<"\n";
       for (int i=0;i<6;i++)
     {
   if (group(n)==1)
     if ((group(i)==2)&&(i>n))
-    output[i]=true;
+    {
+             output[i]=true;
+             cout<<"l11#"<<i<<"\n";
+             }
   if (group(n)==2)
     if ((group(i)==1)&&(i>n))
-     output[i]=true;
+      {
+             output[i]=true;
+             cout<<"l12#"<<i<<"\n";
+             }
     }
         z[n].up=false;
         z[n].stable=true;

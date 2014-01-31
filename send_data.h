@@ -26,14 +26,14 @@ memset (&tty, 0, sizeof tty);
 /* Error Handling */
 if ( tcgetattr ( fd, &tty ) != 0 )
 {
-cout << "Error " << errno << " from tcgetattr: " << strerror(errno) << endl;
+//cout << "Error " << errno << " from tcgetattr: " << strerror(errno) << endl;
 }
-cfsetospeed (&tty, (speed_t)B9600);
-cfsetispeed (&tty, (speed_t)B9600);
+cfsetospeed (&tty, (speed_t)B115200);
+cfsetispeed (&tty, (speed_t)B115200);
    tcflush(fd,TCIFLUSH);
    int n = write(fd, st,length);
     if (n < 0)
-  fputs("write() of 4 bytes failed!\n", stderr);
+ // fputs("write() of 4 bytes failed!\n", stderr);
   close(fd);
   return (fd);
 }
@@ -70,7 +70,7 @@ char *st=new char[50];
 st=create_string(Q1,Q2,Q3,pin[0],pin[1],pin[2],delay);
 char port[32];
 memset(port,'\0',32);
-strcpy(port,"/dev/ttyACM0");
+strcpy(port,"/dev/ttyUSB0");
 sends(port,st,strlen(st));
 f<<st<<"\n";
 st=NULL;

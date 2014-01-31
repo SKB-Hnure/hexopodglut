@@ -1,7 +1,7 @@
 #ifndef LITTLEHEXCONFIG_H_INCLUDED
 #define LITTLEHEXCONFIG_H_INCLUDED
 
-int steptime=800;
+int steptime=2000;
 axval bodysize={250,50,460};
 int dcenleg=80;
 axval L[3]={                               //размеры звеньев ноги
