@@ -219,8 +219,8 @@ glEnd();
 coordsys();
 for (int i=0;i<6;i++)
 {
-H.step(direction,50,steptime,i,stop);
-//usleep(10);
+H.step(direction,70,steptime,i,stop);
+//usleep(1000);
 }
 glPopMatrix();
 glutSwapBuffers();  //завершение функции рисования только для GLUT_DOUBLE
@@ -236,7 +236,8 @@ void Timer(int value)
 {
          //Draw();
         glutPostRedisplay();
-        glutTimerFunc(H.delay, Timer, 0);
+       // glutTimerFunc(H.delay, Timer, 0);
+       glutTimerFunc(0, Timer, 0);
 }
 void reshape (int ax, int ay)
 {
