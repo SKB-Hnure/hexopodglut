@@ -7,8 +7,8 @@
 #include "сonvertation.h"
 #include "hexopod.h"
 #include "send_data.h"
-#include "littlehexconfig.h"
-//#include "bighexconfig.h"
+//#include "littlehexconfig.h"
+#include "bighexconfig.h"
 using namespace std;
 
 float WinWid=1300.0;
@@ -20,6 +20,7 @@ float angleX=0;
 float angleY=0;
 float angleZ=0;
 int direction=0;
+int rotateangle=0;
 bool stop=false;
 hexopod H(bodysize,dcenleg,L,ang,servo_border,pin,I0,dir);
 void draw_string_bitmap(void *font, const char* string)
@@ -93,6 +94,7 @@ switch (key)
             if (direction>359)
              direction=0;
              }
+             rotateangle=0;
             break;
  case 'd':
           if ((direction>90)&&(direction<270))
@@ -103,6 +105,7 @@ switch (key)
              if (direction==-1)
                 direction=359;
                 }
+                rotateangle=0;
             break;
  case 'w':
            if ((direction>0)&&(direction<180))
@@ -113,13 +116,18 @@ switch (key)
             if (direction==360)
             direction=0;
             }
- break;
+            rotateangle=0;
+           break;
  case 's':
            if ((direction>0)&&(direction<180))
            direction++;
            if ((direction>180)&&(direction<360))
             direction--;
- break;
+            rotateangle=0;
+          break;
+ case 'g':
+         rotateangle=30;
+         break;
  case (int)32:
  if (!stop)
   stop=true;
@@ -219,8 +227,9 @@ glEnd();
 coordsys();
 for (int i=0;i<6;i++)
 {
-H.step(direction,70,steptime,i,stop);
-//usleep(1000);
+if (rotateangle==0)
+H.step(direction,70,steptime,i, stop);
+else if (!stop) H.rotation(rotateangle,steptime,i);
 }
 glPopMatrix();
 glutSwapBuffers();  //завершение функции рисования только для GLUT_DOUBLE

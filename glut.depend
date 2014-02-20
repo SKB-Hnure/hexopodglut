@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1391197500 source:/home/diana/Programms/codeblocks/glut/main.cpp
+1392738478 source:/home/diana/Programms/codeblocks/glut/main.cpp
 	<GL/glut.h>
 	<stdlib.h>
 	<stdio.h>
@@ -9,7 +9,7 @@
 	"сonvertation.h"
 	"hexopod.h"
 	"send_data.h"
-	"littlehexconfig.h"
+	"bighexconfig.h"
 
 1370385653 /usr/include/GL/glut.h
 	"freeglut_std.h"
@@ -126,7 +126,7 @@
 	<stdint.h>
 	<inttypes.h>
 
-1390503813 /home/diana/Programms/codeblocks/glut/three_angles.h
+1391763373 /home/diana/Programms/codeblocks/glut/three_angles.h
 	<math.h>
 	"сonvertation.h"
 
@@ -219,7 +219,7 @@
 	<endian.h>
 	<xlocale.h>
 
-1391252837 /home/diana/Programms/codeblocks/glut/send_data.h
+1391864162 /home/diana/Programms/codeblocks/glut/send_data.h
 	<iostream>
 	<unistd.h>
 	<fcntl.h>
@@ -266,12 +266,12 @@
 	<bits/termios.h>
 	<sys/ttydefaults.h>
 
-1391279755 /home/diana/Programms/codeblocks/glut/hexopod.h
+1392741003 /home/diana/Programms/codeblocks/glut/hexopod.h
 	<string.h>
 	"three_angles.h"
 	"send_data.h"
 
-1390503813 /home/diana/Programms/codeblocks/glut/сonvertation.h
+1391685587 /home/diana/Programms/codeblocks/glut/сonvertation.h
 	<string.h>
 
 1390503431 source:/home/shark/robotics/projects/hexapod/hexopodglut/main.cpp
@@ -310,5 +310,9 @@
 
 1390503287 /home/shark/robotics/projects/hexapod/hexopodglut/littlehexconfig.h
 
-1391259881 /home/diana/Programms/codeblocks/glut/littlehexconfig.h
+1391847548 /home/diana/Programms/codeblocks/glut/littlehexconfig.h
+
+1392127353 /home/diana/Programms/codeblocks/glut/bighexconfig.h
+
+1391683628 /home/diana/Programms/codeblocks/glut/glutconfig.h
 

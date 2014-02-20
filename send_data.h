@@ -28,8 +28,8 @@ if ( tcgetattr ( fd, &tty ) != 0 )
 {
 cout << "Error " << errno << " from tcgetattr: " << strerror(errno) << endl;
 }
-cfsetospeed (&tty, (speed_t)B115200);
-cfsetispeed (&tty, (speed_t)B115200);
+cfsetospeed (&tty, (speed_t)B9600);
+cfsetispeed (&tty, (speed_t)B9600);
    tcflush(fd,TCIFLUSH);
    int n = write(fd, st,length);
     if (n < 0)
@@ -68,8 +68,9 @@ void append(int Q1, int Q2, int Q3, int pin[3],int delay, char path[64])        
 ofstream f(path, ios_base::app);
 char *st=new char[50];
 st=create_string(Q1,Q2,Q3,pin[0],pin[1],pin[2],delay);
-char port[32];
-memset(port,'\0',32);
+char port[64];
+memset(port,'\0',64);
+//strcpy(port,"/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_AE014ME2-if00-port0");
 strcpy(port,"/dev/rfcomm0");
 sends(port,st,strlen(st));
 f<<st<<"\n";
