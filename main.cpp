@@ -22,6 +22,7 @@ float angleZ=0;
 int direction=0;
 int rotateangle=0;
 bool stop=false;
+bool execute_rotate=false;
 hexopod H(bodysize,dcenleg,L,ang,servo_border,pin,I0,dir);
 void draw_string_bitmap(void *font, const char* string)
 {
@@ -79,6 +80,9 @@ glColor3f(0,0,0);
 glRasterPos3f(WinWid-150,50,0);
 draw_string_bitmap(GLUT_BITMAP_HELVETICA_12, "Direction Angle=");
 draw_string_bitmap(GLUT_BITMAP_HELVETICA_12, to_char(direction));
+glRasterPos3f(WinWid-150,80,0);
+draw_string_bitmap(GLUT_BITMAP_HELVETICA_12, "Rotation Angle=");
+draw_string_bitmap(GLUT_BITMAP_HELVETICA_12, to_char(rotateangle));
 }
 
 void Keyboard (unsigned char key, int x, int y)
@@ -126,8 +130,16 @@ switch (key)
             rotateangle=0;
           break;
  case 'g':
-         rotateangle=30;
+          if (rotateangle<45)
+         rotateangle++;
          break;
+ case 'h':
+         if (rotateangle>-45)
+         rotateangle--;
+         break;
+case (int)13:
+      execute_rotate=true;
+      break;
  case (int)32:
  if (!stop)
   stop=true;
@@ -227,9 +239,16 @@ glEnd();
 coordsys();
 for (int i=0;i<6;i++)
 {
-if (rotateangle==0)
-H.step(direction,70,steptime,i, stop);
-else if (!stop) H.rotation(rotateangle,steptime,i);
+if (!execute_rotate) {}
+//H.step(direction,70,steptime,i, stop);
+else if (!stop)
+ {
+  if (H.rotation(rotateangle,steptime,i)==1)
+  {
+  execute_rotate=false;
+  rotateangle=0;
+  }
+  }
 }
 glPopMatrix();
 glutSwapBuffers();  //завершение функции рисования только для GLUT_DOUBLE

@@ -3,6 +3,7 @@
 #include <string.h>
 #include "three_angles.h"
 #include "send_data.h"
+ #include <unistd.h>
 #endif // HEXOPOD_H_INCLUDED
 using namespace std;
 struct leg_angles {
@@ -667,10 +668,10 @@ dstep=(float)((abs(p1[n].y-p0[n].y)+2*abs(p0[n].z-rz)))/abs(p1[n].y-p0[n].y);
           {
           servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
           output[n]=false;
-          cout<<n<<":"<<"\n";
-          cout<<n<<":"<<ang[0][n].x<<"\n";
-          cout<<n<<":"<<ang[1][n].z<<"\n";
-          cout<<n<<":"<<ang[2][n].z<<"\n";
+      //    cout<<n<<":"<<"\n";
+       //   cout<<n<<":"<<ang[0][n].x<<"\n";
+       //   cout<<n<<":"<<ang[1][n].z<<"\n";
+       //   cout<<n<<":"<<ang[2][n].z<<"\n";
 
           }
           if (point[n].y<=p1[n].y)
@@ -763,7 +764,7 @@ if (z[n].down)
       {
       servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
       output[n]=false;
-      cout<<"угол в начале спуска:"<<n<<": "<<ang[2][n].z<<"\n";
+      //cout<<"угол в начале спуска:"<<n<<": "<<ang[2][n].z<<"\n";
       }
       if ((point[n].z+dstep>=p0[n].z)&&(point[n].z<p0[n].z))
         for (int i=0;i<6;i++)
@@ -796,10 +797,10 @@ if (z[n].down)
              output[i]=true;
              }
           }
-           cout<<"нулевая\n";
+         //  cout<<"нулевая\n";
         z[n].down=false;
         z[n].stable=true;
-      // clean(path);
+       //clean(path);
         it[n]=0;
          if (group(n)==1)
              {
@@ -879,12 +880,12 @@ if (z[n].down)
 }
 previos_angle=angle;
 }
-void rotation(float angle, float steptime, int n)
+int rotation(float angle, float steptime, int n)
 {
 static bool Q[3];
 static bool first=true;
 static axval point[6]; //текущие точки конца ноги
-static float rz=p0[n].z-40;
+static float rz=p0[n].z-60;
 static bool output[6]={true,true,true,true,true,true};
 static state z[6]={{false, false, true},
                     {false, false, true},
@@ -892,63 +893,149 @@ static state z[6]={{false, false, true},
                     {false, false, true},
                     {false, false, true},
                     {false, false, true}};
+static bool leg_complete_moved[6]={false, false, false, false, false, false};
+static bool active_group[2]={true, false}; //группа ног, которые передвигаются на текущем этапе.
+float x1, y1;
+static float intermed_angle[6];
+static bool bottom_rotate=false;
 //для поворота вокруг свой оси нужно 1. установить ноги в начальное положение
 if (first)
 {
-topoint(transpoint(p0[n],n),n);
-if (n==5) first=false;
+point[n]=p0[n];
+topoint(transpoint(point[n],n),n);
+servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);   //1) 6 пакетов в нулевых точках
+intermed_angle[n]=0;
+if (n==5)
+{
+first=false;
+ for (int j=0;j<6;j++)
+ {
+  z[j].up=true;
+  z[j].stable=false;
+  }
+//usleep(5000000);
+
+ }
 }
 //2 поворот ног на угол angel
  // 2.1 подъем ног первой группы на rz
+if ((active_group[group(n)-1])&&(!leg_complete_moved[n]))         //действия для активной группы если нога еще не в конечном положении
+{
 if (!first)
 {
-if (group(n)==1)
- {
-if (z[n].up)
+if (z[n].up)                                            //подъем вверх
 {
-  point[n].z-=1;
   topoint(transpoint(point[n],n),n);
-
-  if ((point[n].z-1<=rz)&&(point[n].z>rz))                //в следующем блоке для ног другой группы должны вывестись значения
-        {
-        for (int i=0;i<6;i++)
+  point[n].z--;
+ if (point[n].z<=rz)
     {
-  if (group(n)==1)
-    if ((group(i)==2)&&(i<n)&&(i>previos(1,n)))
-     {
-             output[i]=true;
-             }
-  if (group(n)==2)
-    if ((group(i)==1)&&(i<n)&&(i>previos(2,n)))
-      {
-             output[i]=true;
-             }
-    }
-       }
-    if (point[n].z<=rz)
-    {
-     servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
-      for (int i=0;i<6;i++)
-    {
-  if (group(n)==1)
-    if ((group(i)==2)&&(i>n))
-    {
-             output[i]=true;
-             }
-  if (group(n)==2)
-    if ((group(i)==1)&&(i>n))
-      {
-             output[i]=true;
-             }
-    }
-        z[n].up=false;
-        z[n].stable=true;
+     servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n); //3 и 3 пакета в верхних точках без поворота
+     z[n].up=false;
+     z[n].stable=true;
      }
 }
+if (z[n].down)                                            //спуск вниз
+{
+ topoint(transpoint(point[n],n),n);
+ point[n].z++;
+if (point[n].z>p0[n].z)
+{
+servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);   //3 и 3 в нижних с поворотом
+ z[n].down=false;
+ z[n].stable=true;
+ leg_complete_moved[n]=true;
+ if (n==5)
+ {
+  active_group[1]=true;
+  active_group[0]=false;
+ }
+  if (n==3)
+ {
+  active_group[1]=false;
+  active_group[0]=false;
+  bottom_rotate=true;
+ }
+}
+}
+if (z[n].stable) //поворот на angle
+ {
+   x1=(L[0].x+L[1].x+L[2].y/2)-cos(grad_to_rad(1))*(L[0].x+L[1].x+L[2].y/2);
+   y1=sin(grad_to_rad(1))*(L[0].x+L[1].x+L[2].y/2);
+   if ((n==0)||(n==2)||(n==3))
+   {
+   point[n].x-=x1;
+    if (angle>0)
+   point[n].y+=y1;
+    else
+   point[n].y-=y1;
+   }
+   else {
+   point[n].x-=x1;
+    if (angle>0)
+   point[n].y-=y1;
+   else
+   point[n].y+=y1;
+   }
+   topoint(transpoint(point[n],n),n);
+   intermed_angle[n]++;
+ if (intermed_angle[n]>abs(angle))
+  {
+  intermed_angle[n]=0;
+  z[n].down=true;
+  z[n].stable=false;
+  servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n); //3 и 3 в верхних точках с поворотом
+  }
+ }
+}
+}
+else
+ topoint(transpoint(point[n],n),n);
+ if (bottom_rotate==true)
+ {
+   x1=(L[0].x+L[1].x+L[2].y/2)-cos(grad_to_rad(1))*(L[0].x+L[1].x+L[2].y/2);
+   y1=sin(grad_to_rad(1))*(L[0].x+L[1].x+L[2].y/2);
+   if ((n==0)||(n==2)||(n==3))
+   {
+   point[n].x+=x1;
+   if (angle>0)
+   point[n].y-=y1;
+   else
+   point[n].y+=y1;
+   }
+   else {
+   point[n].x+=x1;
+    if (angle>0)
+   point[n].y+=y1;
+   else
+   point[n].y-=y1;
+   }
+   topoint(transpoint(point[n],n),n);
+   if (((int)intermed_angle[n]%5==0)&&(intermed_angle[n]-4<=abs(angle)))
+   servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+   intermed_angle[n]++;
+  // cout<<intermed_angle[n];
+ if (intermed_angle[n]-3>abs(angle))
+  {
+ intermed_angle[n]=0;
+ servo_angles(ang[0][n].x, ang[1][n].z,ang[2][n].z, n);
+ bottom_rotate=false;
+ first=true;
+ for (int i=0; i<6;i++)
+ {
+ leg_complete_moved[i]=false;
+ output[i]=true;
+ z[i].down=false;
+ z[i].up=false;
+ z[i].stable=true;
+ }
+ active_group[0]=true;
+ active_group[1]=false;
+ return 1;
+  }
+ }
+ return 0;
  }
 
-}
-}
 };
 
 
